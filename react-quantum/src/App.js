@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import PubNub from 'pubnub';
 import Swal from "sweetalert2";  
 import shortid  from 'shortid';
+import HiScores from './views/hiscores/template';
+import UserProfile from './views/user_profile/template';
 
 
 class App extends Component {
@@ -195,6 +198,7 @@ class App extends Component {
   }
   render(){
     return(
+      <Router>
       <div>
         <div className="button-container">
           <button 
@@ -215,6 +219,12 @@ class App extends Component {
             </button>
         </div>   
       </div>
+
+        <Switch>
+          <Route path="/hiscores" component={HiScores} />
+          <Route path="/userprofile" component={UserProfile} />
+        </Switch>
+      </Router>
     )
   }
 }
