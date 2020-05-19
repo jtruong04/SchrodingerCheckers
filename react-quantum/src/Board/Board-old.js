@@ -55,7 +55,7 @@ class Board extends React.Component {
         { index=((i-1)*2+(j)/2);
           columns.push(
           <Tunnels
-            id = {"t"+index+(index+1)}
+            id = {index+"t"+(index+1)}
             tunneltype="tunnelright" />
           );
         }
@@ -65,7 +65,7 @@ class Board extends React.Component {
           { index=((i-2)*2+(j+1)/2);
             columns.push(
             <Tunnels
-              id = {"t"+(index)+(index+4)}
+              id = {(index)+"t"+(index+4)}
               tunneltype="tunneldown" />
           );}
           else
