@@ -78,7 +78,7 @@ class Board extends React.Component {
       else
         {
            index=((i-1)*size/2+(j)/2);
-            columns.push(tstates.find((e)=> e.key === "t"+index+(index+1)));
+            columns.push(tstates.find((e)=> e.key === index+"t"+(index+1)));
 //          columns.push(tstates.slice(index-1,index));
         }
       }
@@ -88,7 +88,7 @@ class Board extends React.Component {
       if(j%2!==0)
         { index=((i-2)*size/2+(j+1)/2);
 
-        columns.push(tstates.find((e)=> e.key === "t"+index+(index+size)));
+        columns.push(tstates.find((e)=> e.key === index+"t"+(index+size)));
         }
       else
         {
