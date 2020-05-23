@@ -21,7 +21,7 @@ if __name__ == '__main__':
     '''
     # Set up SQL Alchemy Engine and ORM
     sql_user = 'root'
-    sql_pwd = urllib.parse.quote_plus("<>")
+    sql_pwd = urllib.parse.quote_plus("QuantumCAT2020?")
     engine = create_engine(('mysql://'
                             + sql_user + ':' + sql_pwd
                             + '@maybegames.dev:3306/QuantumCatDummy'))
@@ -35,12 +35,17 @@ if __name__ == '__main__':
     app.config["DEBUG"] = True
 
 
-    @app.route('/ApiTest', methods=['GET'])
+    @app.route('/home', methods=['GET'])
     def home():
         user_info = sess.query(Users)
         user_info = user_info.filter(Users.usr_name == 'John')[0].pwd
 
         return user_info
 
+
+    @app.route('/ApiTest', methods=['GET'])
+    def check_pwd(input_user, input_pass):
+        user_info = sess.query(Users)
+        return user_info.select([pwd]).where(Users.usr_name == request.GET[input_user])
 
     app.run()
