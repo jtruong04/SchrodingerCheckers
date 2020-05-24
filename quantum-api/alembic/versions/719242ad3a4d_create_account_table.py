@@ -17,6 +17,22 @@ depends_on = None
 
 
 def upgrade():
+    op.create_table(
+        'user_information',
+        sa.Column('usr_name', sa.String(50), primary_key=True),
+        sa.Column('First_Name', sa.String(50), nullable=False),
+        sa.Column('Last_Name', sa.String(50), nullable=False),
+        sa.Column('email', sa.String(50), nullable=False),
+        sa.Column('location', sa.String(50), nullable=True),
+    )
+    op.create_table(
+        'login',
+        sa.Column('usr_name', sa.String(50), primary_key=True),
+        sa.Column('pwd', sa.String(50), nullable=False)
+    )
+    op.create_foreign_key(
+        "user_name_to_login_link", "user_information",
+        "login", ["usr_name"], ["usr_name"])
     pass
 
 
