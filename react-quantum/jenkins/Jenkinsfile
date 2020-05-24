@@ -14,11 +14,11 @@ pipeline {
                 sh 'cd react-quantum && npm install'
             }
         }
-        stage('Test') {
-            steps {
-                sh 'cd react-quantum && ./jenkins/test.sh'
-            }
-        }
+        // stage('Test') {
+        //     steps {
+        //         sh 'cd react-quantum && ./jenkins/test.sh'
+        //     }
+        // }
         stage('Deliver') {
             steps {
                 sh 'cd react-quantum && ./jenkins/deliver.sh'
