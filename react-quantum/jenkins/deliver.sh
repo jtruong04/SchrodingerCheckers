@@ -1,9 +1,8 @@
 set -x
-npm run start
+yarn build
 set +x
 
 set -x
-npm start &
-sleep 1
+yarn start &&
 echo $! > .pidfile
 set +x
