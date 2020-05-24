@@ -1,9 +1,7 @@
 import React from 'react';
-//import PubNub from 'pubnub';
-//import Swal from "sweetalert2";
-//import shortid  from 'shortid';
 import Board from './Board/Board';
 import './Board/Board.css';
+import PubNub from 'pubnub';
 import {BoardState,tunnelState} from './Board/DummyState'
 
 
@@ -21,6 +19,29 @@ constructor(props)
               }
 
                 //tdata: new Array(this.cellN*(this.cellN-1)).fill()}
+              this.pubnub = this.props.pubnub;
+              if(!this.pubnub){console.log("Error: No Pubnub passed into GameBoard")};
+              this.gameChannel = this.props.gameChannel;
+              if(!this.gameChannel){console.log("Error: No GameChannel passed into GameBoard")}
+              // init listener for when a square or tunnel changes
+              this.pubnub.addListener({
+                message:(msg)=>{
+                  if(msg.message.sqChange){
+                    const squares = this.state.sqdata.slice();
+                    squares[msg.message.sqChange.val] = msg.message.sqChange.square;
+                    this.setState({
+                      sqdata: squares,
+                    })
+                  }else if(msg.message.tChange){
+                    const tunnels = this.state.tdata.slice();
+                    tunnels[msg.message.tChange.edgeval] = msg.message.tChange.tunnel;
+                    this.setState({
+                      tdata: tunnels,
+                    })
+                    console.log(this.state.tdata)
+                  }
+                }
+              })
   };
 sqindex (i,j)
 {
@@ -83,10 +104,9 @@ TunnelChange(index)
 
 const tunnels = this.state.tdata.slice();
 const indval=index.split("t");
-//console.log(tunnels);
-//console.log(index,this.tunnelindex(parseInt(indval[0]),parseInt(indval[1])));
-const edgeval = this.tunnelindex(parseInt(indval[0]),parseInt(indval[1]))
-//const val = tunnels.findIndex(e => e.id === index );
+const edgeval = this.tunnelindex(parseInt(indval[0]),parseInt(indval[1]));
+
+
 let oldbit = tunnels[edgeval].bitstate;
 let newbit = 0;
 
@@ -103,8 +123,22 @@ else if (oldbit ===-1)
   newbit = 2;
 }
 else newbit = 0;
-//publish to pubnub needs to be added here to sync
 tunnels[edgeval].bitstate  = newbit;
+//send to pubnub to sync
+this.pubnub.publish({
+  message:{
+    tChange: {
+      edgeval: edgeval,
+      tunnel: tunnels[edgeval],
+    },
+  },
+  channel: this.gameChannel
+}).then((response)=>{
+  if(response.error){
+    console.log(response.error);
+  }
+});
+
 this.setState({
         tdata: tunnels,
 //          whosTurn: !this.state.whosTurn
@@ -122,7 +156,21 @@ const  val= parseInt(index.substr(1))-1;
 squares[val].bitstate =  squares[val].bitstate===0?1:0 ;
 //let newbit = val.bitstate===0?1:0;
 //console.log(val.bitstate,newbit)
-  //publish to pubnub needs to be added here to sync
+
+//send to pubnub to sync
+this.pubnub.publish({
+  message:{
+    sqChange: {
+      val: val,
+      square: squares[val],
+    },
+  },
+  channel: this.gameChannel
+}).then((response)=>{
+  if(response.error){
+    console.log(response.error);
+  }
+});
 
   this.setState({
           sqdata: squares,

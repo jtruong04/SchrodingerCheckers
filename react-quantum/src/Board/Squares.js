@@ -1,7 +1,4 @@
 import React from 'react';
-//import PubNub from 'pubnub';
-//import Swal from "sweetalert2";
-//import shortid  from 'shortid';
 
 class Squares extends React.Component {
 
@@ -9,7 +6,6 @@ class Squares extends React.Component {
     super(props);
     this.state = {hovered:false};
   }
-
  onClickSConsole(id){
  console.log("Box "+ id+ " was clicked!  ");
 }
