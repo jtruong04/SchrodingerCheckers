@@ -15,7 +15,6 @@ class App extends Component {
       subscribeKey: "sub-c-0c2c540c-9707-11ea-8e71-f2b83ac9263d"
     });
     this.state = {
-      ap: 3,
       isPlayer: false,
       isRoomCreator: false,
       isDisabled: false,
@@ -197,7 +196,6 @@ class App extends Component {
   // Reset everything
   endGame = () => {
     this.setState({
-      ap: 3,
       isPlaying: false,
       isRoomCreator: false,
       isDisabled: false,
@@ -216,7 +214,7 @@ class App extends Component {
     let game_board;
     if(this.state.gameReady){
       // if(true){
-      game_board = <GameBoard gameChannel = {this.gameChannel} pubnub = {this.pubnub}/>;
+      game_board = <GameBoard gameChannel = {this.gameChannel} pubnub = {this.pubnub} myTurn = {this.state.myTurn}/>;
     }
     return(
       <Router>
