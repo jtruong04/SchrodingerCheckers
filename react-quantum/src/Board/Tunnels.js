@@ -40,13 +40,13 @@ class Tunnels extends React.Component {
 
         return  (<img style={{width: "50%",height: "100%",display:"block",
         marginLeft:"25%",opacity:"100%",transform:"rotate("+(0+angl)+"deg)"}}
-         src = {imgs} ></img>);
+         src = {imgs} alt="alt property"></img>);
       }
 
       else{
       return (<img style={{width: "100%",height: "50%",display:"block",
       marginTop:"50%",opacity:"100%",transform:"rotate("+(90+angl)+"deg)"}}
-      src = {imgs} ></img>);
+      src = {imgs} alt="alt property"></img>);
     }
 
   }

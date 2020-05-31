@@ -1,8 +1,6 @@
 import React from 'react';
 import Board from './Board/Board';
 import './Board/Board.css';
-import PubNub from 'pubnub';
-import {BoardState,tunnelState} from './Board/DummyState'
 
 
 
@@ -29,7 +27,7 @@ constructor(props){
   if(!this.pubnub){console.log("Error: No Pubnub passed into GameBoard")};
   this.gameChannel = this.props.gameChannel;
   if(!this.gameChannel){console.log("Error: No GameChannel passed into GameBoard")}
-  // init listener for when a square or tunnel changes
+  // init listener for square, tunnel, and endTurn changes.
   this.pubnub.addListener({
     message:(msg)=>{
       if(msg.message.sqChange && !this.state.myTurn){
@@ -41,7 +39,6 @@ constructor(props){
       }else if(msg.message.tChange && !this.state.myTurn){
         const tunnels = this.state.tdata.slice();
         tunnels[msg.message.tChange.edgeval] = msg.message.tChange.tunnel;
-        console.log('listener for tunnels')
         this.setState({
           tdata: tunnels,
         })
@@ -99,7 +96,8 @@ InitTunnels()
         from:ind,
         to:ind1,
         bitstate:0,
-        changed: false
+        changed: false,
+        destroyed: false,
       });
       }
 
@@ -111,6 +109,7 @@ InitTunnels()
         to:ind2,
         bitstate:0,
         changed: false,
+        destroyed: false,
       });
       }
     }
@@ -129,19 +128,44 @@ tunnelindex(box1,box2)
 }
 TunnelChange(index)
 {
-
 const tunnels = this.state.tdata.slice();
 const indval=index.split("t");
 const edgeval = this.tunnelindex(parseInt(indval[0]),parseInt(indval[1]));
-
-if((this.state.ap > 0 && this.state.myTurn)|| (this.state.myTurn && (this.state.tdata[edgeval].bitstate != this.original_tdata[edgeval].bitstate) ) ){
-
+// Destroying a tunnel
+if(this.state.ap > 1 && this.original_tdata[edgeval].bitstate !== 0 && this.state.myTurn && tunnels[edgeval].bitstate !== 0 && !tunnels[edgeval].destroyed){
+  let newbit = 0;
+  tunnels[edgeval].bitstate = newbit;
+  this.pubnub.publish({
+    message:{
+      tChange: {
+        edgeval: edgeval,
+        tunnel: tunnels[edgeval],
+      },
+    },
+    channel: this.gameChannel
+  }).then((response)=>{
+    if(response.error){
+      console.log(response.error);
+    }
+  });
+  tunnels[edgeval].destroyed = true;
+  this.setState({
+    ap: this.state.ap - 2,
+    tdata: tunnels,
+  },()=>{
+    console.log('call back')
+    console.log(tunnels)
+  })
+  // conditions to flip a tunnel. Its your turn and you have more than 0 ap
+  // or its your turn and you are flipping a bit you flipped this turn
+  // or this tunnel was destroyed then replaced
+}else if((this.state.ap > 0 && this.state.myTurn) || (this.state.myTurn && (tunnels[edgeval].bitstate !== this.original_tdata[edgeval].bitstate) ) || (this.state.myTurn && tunnels[edgeval].changed && tunnels[edgeval].destroyed) ){
+  console.log('normal flipping')
   let oldbit = tunnels[edgeval].bitstate;
   let newbit = 0;
-
   if(oldbit === 0)
   {
-  newbit = 1;
+    newbit = 1;
   }
   else if (oldbit ===1)
   {
@@ -154,7 +178,6 @@ if((this.state.ap > 0 && this.state.myTurn)|| (this.state.myTurn && (this.state.
   else newbit = 0;
   tunnels[edgeval].bitstate  = newbit;
   //send to pubnub to sync
-  console.log('publish')
   this.pubnub.publish({
     message:{
       tChange: {
@@ -169,21 +192,19 @@ if((this.state.ap > 0 && this.state.myTurn)|| (this.state.myTurn && (this.state.
     }
   });
 
-  if(this.state.tdata[edgeval].changed && tunnels[edgeval].bitstate == this.original_tdata[edgeval].bitstate){
-    this.state.ap++;
+  if(this.state.tdata[edgeval].changed && tunnels[edgeval].bitstate === this.original_tdata[edgeval].bitstate){
     tunnels[edgeval].changed = false;
+    this.setState({
+      ap: this.state.ap + 1,
+      tdata: tunnels,
+    });
   }else if(!this.state.tdata[edgeval].changed){
-    console.log(tunnels[edgeval].changed)
-    this.state.ap--;
     tunnels[edgeval].changed = true;
-    console.log(edgeval)
+    this.setState({
+      ap: this.state.ap - 1,
+      tdata: tunnels,
+    });
   }
-  console.log('set state')
-  this.setState({
-          tdata: tunnels,
-        },()=>{
-          console.log('set state finished')
-        });
   }
 }
 
@@ -196,7 +217,7 @@ SqChange(index)
 
   // conditions to flip a bit. Its your turn and you have more than 0 ap
   // or its your turn and you are flipping a bit you flipped this turn
-  if((this.state.ap > 0 && this.state.myTurn)|| (this.state.myTurn && (this.state.sqdata[val].bitstate != this.original_sqdata[val].bitstate) ) ){
+  if((this.state.ap > 0 && this.state.myTurn)|| (this.state.myTurn && (this.state.sqdata[val].bitstate !== this.original_sqdata[val].bitstate) ) ){
     squares[val].bitstate =  squares[val].bitstate===0?1:0 ;
 
     //send to pubnub to sync
@@ -217,12 +238,14 @@ SqChange(index)
       this.setState({
               sqdata: squares,
             },()=>{
-              console.log(this.state.sqdata[val])
-              console.log(this.original_sqdata[val])
-              if(this.state.sqdata[val].bitstate == this.original_sqdata[val].bitstate){
-                this.state.ap++;
+              if(this.state.sqdata[val].bitstate === this.original_sqdata[val].bitstate){
+                this.setState({
+                  ap: this.state.ap + 1
+                })
               }else{
-                this.state.ap--;
+                this.setState({
+                  ap: this.state.ap - 1
+                })
               }
             });
   }
