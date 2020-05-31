@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import shortid  from 'shortid';
 import HiScores from './views/hiscores/template';
 import UserProfile from './views/user_profile/template';
-
+import GameBoard from './GameBoard';
 
 class App extends Component {
   constructor(props){
@@ -15,11 +15,11 @@ class App extends Component {
       subscribeKey: "sub-c-0c2c540c-9707-11ea-8e71-f2b83ac9263d"
     });
     this.state = {
-      ap: 3,
       isPlayer: false,
       isRoomCreator: false,
       isDisabled: false,
       myTurn: false,
+      gameReady: false,
     };
 
     this.lobbyChannel = null;
@@ -55,9 +55,20 @@ class App extends Component {
           }
         }
       });
+      this.pubnub.addListener({
+        message: (msg) =>{
+          if(msg.message.gameReady){
+            this.setState({
+              gameReady: true,
+            })
+          }
+        }
+      })
   }
   //display here now to console
   onPressHereNow = (e) => {
+    console.log('gameReady')
+    console.log(this.state.gameReady);
     console.log("Here Now")
     console.log(this.lobbyChannel)
     console.log(this.gameChannel)
@@ -145,12 +156,16 @@ class App extends Component {
         this.pubnub.publish({
           message:{
             notRoomCreator: true,
+            gameReady: true,
           },
           channel: this.lobbyChannel
         }).then((response)=>{
           // after publish response goes through
           if(!response.error){
             this.subscribeToGameChannel();
+            this.setState({
+              gameReady: true,
+            })
           }else{
             console.log(response.error)
           }
@@ -181,7 +196,6 @@ class App extends Component {
   // Reset everything
   endGame = () => {
     this.setState({
-      ap: 3,
       isPlaying: false,
       isRoomCreator: false,
       isDisabled: false,
@@ -197,6 +211,11 @@ class App extends Component {
     });
   }
   render(){
+    let game_board;
+    if(this.state.gameReady){
+      // if(true){
+      game_board = <GameBoard gameChannel = {this.gameChannel} pubnub = {this.pubnub} myTurn = {this.state.myTurn}/>;
+    }
     return(
       <Router>
       <div>
@@ -224,6 +243,7 @@ class App extends Component {
           <Route path="/hiscores" component={HiScores} />
           <Route path="/userprofile" component={UserProfile} />
         </Switch>
+        {game_board}
       </Router>
     )
   }

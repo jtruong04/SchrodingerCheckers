@@ -1,27 +1,65 @@
 import React from 'react';
-//import PubNub from 'pubnub';
-//import Swal from "sweetalert2";
-//import shortid  from 'shortid';
 import Board from './Board/Board';
 import './Board/Board.css';
-import {BoardState,tunnelState} from './Board/DummyState'
 
 
 
 class GameBoard extends React.Component{
-constructor(props)
-{
-  super(props)
-
+constructor(props){
+  super(props);
+  const _ = require('lodash');
   this.cellN = 4;
 
   this.state = { //sqdata : new Array(this.cellN**2).fill(),
                 sqdata :this.InitSquares(),
-                tdata : this.InitTunnels()
+                tdata : this.InitTunnels(),
+                ap: 3,
+                myTurn: this.props.myTurn,
               }
 
-                //tdata: new Array(this.cellN*(this.cellN-1)).fill()}
-  };
+  // Use these to check what the original state was. 
+  // So if on my turn i flip a bit and flip it back i should get back that ap
+  this.original_sqdata = _.cloneDeep(this.state.sqdata);
+  this.original_tdata  = _.cloneDeep(this.state.tdata);
+
+  //tdata: new Array(this.cellN*(this.cellN-1)).fill()}
+  this.pubnub = this.props.pubnub;
+  if(!this.pubnub){console.log("Error: No Pubnub passed into GameBoard")};
+  this.gameChannel = this.props.gameChannel;
+  if(!this.gameChannel){console.log("Error: No GameChannel passed into GameBoard")}
+  // init listener for square, tunnel, and endTurn changes.
+  this.pubnub.addListener({
+    message:(msg)=>{
+      if(msg.message.sqChange && !this.state.myTurn){
+        const squares = this.state.sqdata.slice();
+        squares[msg.message.sqChange.val] = msg.message.sqChange.square;
+        this.setState({
+          sqdata: squares,
+        });
+      }else if(msg.message.tChange && !this.state.myTurn){
+        const tunnels = this.state.tdata.slice();
+        tunnels[msg.message.tChange.edgeval] = msg.message.tChange.tunnel;
+        this.setState({
+          tdata: tunnels,
+        })
+      }else if(msg.message.endTurn){
+        if(!this.state.myTurn){
+          this.setState({
+            myTurn: true,
+            ap: 3
+          },()=>{
+            this.original_sqdata = _.cloneDeep(this.state.sqdata);
+            this.original_tdata = _.cloneDeep(this.state.tdata);
+          });
+        }else{
+          this.setState({
+            myTurn: false,
+          })
+        }
+      }
+    }
+  })
+};
 sqindex (i,j)
 {
   return (i-1)*this.cellN+ j;
@@ -54,15 +92,25 @@ InitTunnels()
       if(j<cell)
       {
       newarray.push(
-        {id:ind+"t"+ind1,from:ind,
-        to:ind1,bitstate:0});
+        {id:ind+"t"+ind1,
+        from:ind,
+        to:ind1,
+        bitstate:0,
+        changed: false,
+        destroyed: false,
+      });
       }
 
       if(i<cell)
       {
       newarray.push(
-        {id:ind+"t"+ind2,from:ind,
-        to:ind2,bitstate:0});
+        {id:ind+"t"+ind2,
+        from:ind,
+        to:ind2,
+        bitstate:0,
+        changed: false,
+        destroyed: false,
+      });
       }
     }
     return newarray;
@@ -80,55 +128,143 @@ tunnelindex(box1,box2)
 }
 TunnelChange(index)
 {
-
 const tunnels = this.state.tdata.slice();
 const indval=index.split("t");
-//console.log(tunnels);
-//console.log(index,this.tunnelindex(parseInt(indval[0]),parseInt(indval[1])));
-const edgeval = this.tunnelindex(parseInt(indval[0]),parseInt(indval[1]))
-//const val = tunnels.findIndex(e => e.id === index );
-let oldbit = tunnels[edgeval].bitstate;
-let newbit = 0;
+const edgeval = this.tunnelindex(parseInt(indval[0]),parseInt(indval[1]));
+// Destroying a tunnel
+if(this.state.ap > 1 && this.original_tdata[edgeval].bitstate !== 0 && this.state.myTurn && tunnels[edgeval].bitstate !== 0 && !tunnels[edgeval].destroyed){
+  let newbit = 0;
+  tunnels[edgeval].bitstate = newbit;
+  this.pubnub.publish({
+    message:{
+      tChange: {
+        edgeval: edgeval,
+        tunnel: tunnels[edgeval],
+      },
+    },
+    channel: this.gameChannel
+  }).then((response)=>{
+    if(response.error){
+      console.log(response.error);
+    }
+  });
+  tunnels[edgeval].destroyed = true;
+  this.setState({
+    ap: this.state.ap - 2,
+    tdata: tunnels,
+  },()=>{
+    console.log('call back')
+    console.log(tunnels)
+  })
+  // conditions to flip a tunnel. Its your turn and you have more than 0 ap
+  // or its your turn and you are flipping a bit you flipped this turn
+  // or this tunnel was destroyed then replaced
+}else if((this.state.ap > 0 && this.state.myTurn) || (this.state.myTurn && (tunnels[edgeval].bitstate !== this.original_tdata[edgeval].bitstate) ) || (this.state.myTurn && tunnels[edgeval].changed && tunnels[edgeval].destroyed) ){
+  console.log('normal flipping')
+  let oldbit = tunnels[edgeval].bitstate;
+  let newbit = 0;
+  if(oldbit === 0)
+  {
+    newbit = 1;
+  }
+  else if (oldbit ===1)
+  {
+    newbit = -1;
+  }
+  else if (oldbit ===-1)
+  {
+    newbit = 2;
+  }
+  else newbit = 0;
+  tunnels[edgeval].bitstate  = newbit;
+  //send to pubnub to sync
+  this.pubnub.publish({
+    message:{
+      tChange: {
+        edgeval: edgeval,
+        tunnel: tunnels[edgeval],
+      },
+    },
+    channel: this.gameChannel
+  }).then((response)=>{
+    if(response.error){
+      console.log(response.error);
+    }
+  });
 
-if(oldbit === 0)
-{
-newbit = 1;
-}
-else if (oldbit ===1)
-{
-  newbit = -1;
-}
-else if (oldbit ===-1)
-{
-  newbit = 2;
-}
-else newbit = 0;
-//publish to pubnub needs to be added here to sync
-tunnels[edgeval].bitstate  = newbit;
-this.setState({
-        tdata: tunnels,
-//          whosTurn: !this.state.whosTurn
-      });
+  if(this.state.tdata[edgeval].changed && tunnels[edgeval].bitstate === this.original_tdata[edgeval].bitstate){
+    tunnels[edgeval].changed = false;
+    this.setState({
+      ap: this.state.ap + 1,
+      tdata: tunnels,
+    });
+  }else if(!this.state.tdata[edgeval].changed){
+    tunnels[edgeval].changed = true;
+    this.setState({
+      ap: this.state.ap - 1,
+      tdata: tunnels,
+    });
+  }
+  }
 }
 
 SqChange(index)
 {
 
+
   const squares = this.state.sqdata.slice();
+  const  val = parseInt(index.substr(1))-1;
 
+  // conditions to flip a bit. Its your turn and you have more than 0 ap
+  // or its your turn and you are flipping a bit you flipped this turn
+  if((this.state.ap > 0 && this.state.myTurn)|| (this.state.myTurn && (this.state.sqdata[val].bitstate !== this.original_sqdata[val].bitstate) ) ){
+    squares[val].bitstate =  squares[val].bitstate===0?1:0 ;
 
-//const val = squares.findIndex(e => e.id === index );
-const  val= parseInt(index.substr(1))-1;
-squares[val].bitstate =  squares[val].bitstate===0?1:0 ;
-//let newbit = val.bitstate===0?1:0;
-//console.log(val.bitstate,newbit)
-  //publish to pubnub needs to be added here to sync
+    //send to pubnub to sync
+    this.pubnub.publish({
+      message:{
+        sqChange: {
+          val: val,
+          square: squares[val],
+        },
+      },
+      channel: this.gameChannel
+    }).then((response)=>{
+      if(response.error){
+        console.log(response.error);
+      }
+    });
 
-  this.setState({
-          sqdata: squares,
-//          whosTurn: !this.state.whosTurn
-        });
+      this.setState({
+              sqdata: squares,
+            },()=>{
+              if(this.state.sqdata[val].bitstate === this.original_sqdata[val].bitstate){
+                this.setState({
+                  ap: this.state.ap + 1
+                })
+              }else{
+                this.setState({
+                  ap: this.state.ap - 1
+                })
+              }
+            });
+  }
 }
+
+endTurn(){
+  this.pubnub.publish({
+    message:{
+      endTurn: true,
+    },
+    channel: this.gameChannel
+  }).then((response)=>{
+    if(response.error){
+      console.log(response.error);
+    }
+  })
+}
+
+
  render() {
 
   return (
@@ -141,6 +277,13 @@ squares[val].bitstate =  squares[val].bitstate===0?1:0 ;
           onTClick={index => this.TunnelChange(index)}
           onSClick={index => this.SqChange(index)}
             />
+            <label> My Turn: {this.state.myTurn.toString()} </label>
+            <label>AP: {this.state.ap}</label>
+            <button
+            onClick={(e)=> this.endTurn()}
+            >
+              End Turn
+            </button>
           </div>
         );
  }

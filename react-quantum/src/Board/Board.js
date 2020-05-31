@@ -1,11 +1,7 @@
 import React from 'react';
-//import PubNub from 'pubnub';
-//import Swal from "sweetalert2";
-//import shortid  from 'shortid';
 import Square from './Squares';
 import Tunnels from './Tunnels';
 import './Board.css';
-//import './Board/DummyState'
 
 class Board extends React.Component {
   // Create the 4 x 4 board
