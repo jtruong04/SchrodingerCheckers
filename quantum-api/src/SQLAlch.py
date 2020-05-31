@@ -88,8 +88,8 @@ if __name__ == '__main__':
         if request.method == 'POST':
             usr =request.form['username'] 
             pwd = request.form['password'] 
-            user_info = session.query(LoginTable)
-            pwd_db = user_info.filter(LoginTable.usr_name == usr)[0].pwd
+            user_info = session.query(UserInfoTable)
+            pwd_db = user_info.filter(UserInfoTable.usr_name == usr)[0].pwd
             if verify_password(pwd,pwd_db):
                 return redirect(url_for('home'))
             else:
