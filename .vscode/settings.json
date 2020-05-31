@@ -2,5 +2,6 @@
     "python.linting.pylintEnabled": true,
     "python.linting.flake8Enabled": false,
     "python.linting.enabled": true,
-    "python.pythonPath": "/Users/mjpmorse/.pyenv/versions/3.7.3/bin/python"
+    "python.pythonPath": "/Users/mjpmorse/.pyenv/versions/3.7.3/bin/python",
+    "python.linting.pylintArgs": ["--load-plugins", "pylint-flask"]
 }

@@ -42,6 +42,10 @@ def verify_password(usr_given, from_db):
 
 
 class UserInfoTable(Base):
+    """ Main table which contains user data.
+    Arguments:
+        Base {declarative_base} -- SQLAlchemy base
+    """
     __tablename__ = 'user_information'
     usr_name = Column(VARCHAR, primary_key=True)
     First_Name = Column(VARCHAR)
@@ -52,9 +56,10 @@ class UserInfoTable(Base):
 
 
 if __name__ == '__main__':
-    '''
-    Test Routine
-    '''
+    """ Test while things are getting going
+    Returns:
+        [type] -- [description]
+    """
     # Set up SQL Alchemy Engine and ORM
     sql_user = 'root'
     sql_pwd = urllib.parse.quote_plus("QuantumCAT2020?")
