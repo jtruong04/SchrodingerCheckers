@@ -1,0 +1,30 @@
+pipeline {
+    agent {
+        docker {
+            image 'node:13.12.0-alpine'
+            args '-p 3000:3000'
+        }
+    }
+    environment {
+        CI = 'true'
+    }
+    stages {
+        stage('Build') {
+            steps {
+                sh 'cd react-quantum && npm install'
+            }
+        }
+        // stage('Test') {
+        //     steps {
+        //         sh 'cd react-quantum && ./jenkins/test.sh'
+        //     }
+        // }
+        stage('Test') {
+            steps {
+                sh 'cd react-quantum && ./jenkins/deliver.sh'
+                input message: 'Finished using the web site? (Click "Proceed" to continue)'
+                sh 'cd react-quantum && ./jenkins/kill.sh'
+            }
+        }
+    }
+}
