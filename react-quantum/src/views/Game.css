@@ -1,0 +1,24 @@
+.tile {
+    width: 20%; /* 100% / 4 squares = 25%, 5% subtracted for margin */
+    padding-bottom: 20%; /* Forces tile to be square shaped, I actually have no idea why this works and I'm too lazy to work it out. */
+    margin: 2.5%; /* That 5% is split for left/right and top/bottom */
+    border: 2px solid black;
+}
+
+.whiteTile {
+    background: white;
+}
+
+.blackTile {
+    background: black;
+}
+
+.link {
+    z-index: 5;
+    width: 20%;
+    position: absolute;
+    text-align: center;
+    font-size: calc(25% + 3vw + 3vh);
+    transform: translate(-50%,-50%);
+    color: orange;
+}

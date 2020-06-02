@@ -1,252 +1,54 @@
-import React, { Component } from 'react';
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import PubNub from 'pubnub';
-import Swal from "sweetalert2";
-import shortid  from 'shortid';
-import HiScores from './views/hiscores/template';
-import UserProfile from './views/user_profile/template';
-import GameBoard from './GameBoard';
+/*
 
-class App extends Component {
-  constructor(props){
-    super(props);
-    this.pubnub = new PubNub({
-      publishKey: "pub-c-075d6884-ce3e-4809-acdc-147545392971",
-      subscribeKey: "sub-c-0c2c540c-9707-11ea-8e71-f2b83ac9263d"
-    });
-    this.state = {
-      isPlayer: false,
-      isRoomCreator: false,
-      isDisabled: false,
-      myTurn: false,
-      gameReady: false,
-    };
+The App page does one thing and one thing only. It handles displaying the various pages.
+At the top of the page is the navbar. This is persistant throughout all views. Below that,
+it displays the current view. We have 4 views in the app
 
-    this.lobbyChannel = null;
-    this.gameChannel = null;
-    this.roomId = null;
-  }
+1) Home - This prompts the user to create/join a room to play the game
+2) Game - This handles the game itself and is where the bulk of the time spent will be
+3) Rankings - Displays the players rank and the top rankings in the world
+4) Profile - Allows player to view/manage their user account
 
-  componentWillUnmount = () => {
-    this.pubnub.unsubscribe({
-      channels : [this.lobbyChannel, this.gameChannel]
-    });
-  }
-  subscribeToGameChannel = () => {
-    // Create a different channel for the game
-    this.gameChannel = 'schrodingercheckersGame--' + this.roomId;
-    this.pubnub.subscribe({
-      channels: [this.gameChannel]
-    });
-    this.setState({
-      isPlaying: true
-    });
-    // Close the modals if they are opened
-    Swal.close();
+There should be no need to change App.js unless we add another view or want to change the layout.
 
-  }
-  componentDidUpdate = () => {
-    // Check that the player is connected to a channel
-    // if (this.lobbyChannel != null){
-      this.pubnub.addListener({
-        message: (msg) =>{
-          if(msg.message.notRoomCreator){
-            this.subscribeToGameChannel();
-          }
-        }
-      });
-      this.pubnub.addListener({
-        message: (msg) =>{
-          if(msg.message.gameReady){
-            this.setState({
-              gameReady: true,
-            })
-          }
-        }
-      })
-  }
-  //display here now to console
-  onPressHereNow = (e) => {
-    console.log('gameReady')
-    console.log(this.state.gameReady);
-    console.log("Here Now")
-    console.log(this.lobbyChannel)
-    console.log(this.gameChannel)
-    this.pubnub.hereNow({
-      channels: [this.lobbyChannel,this.gameChannel],
-    }).then((response)=>{
-      console.log('here Now button Response')
-      console.log(response)
-      });
-    }
-  // Create a room channel
-  onPressCreate = (e) => {
-    //Create a random name for the channel
-    this.roomId = shortid.generate().substring(0,5);
-    this.lobbyChannel = 'schrodingercheckers--' + this.roomId;
+*/
 
-    this.pubnub.subscribe({
-      channels: [this.lobbyChannel],
-      withPresence: true
-    });
+import React from 'react';
+// import logo from './logo.svg';
+import './App.css';
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Container from "react-bootstrap/Container";
 
-    //open the modal
-    Swal.fire({
-      position: 'top',
-      allowOutsideClick: false,
-      title: this.roomId,
-      width: 275,
-      padding: '0.7em',
-      //Custom CSS
-      customClass: {
-        heightAuto: false,
-        title: 'title-class',
-        popup: 'popup-class',
-        confirmButton: 'button-class'
-      }
-    })
+import Home from './views/Home.js'
+import Game from "./views/Game.js";
+import Profile from "./views/Profile.js";
+import Rankings from "./views/Rankings.js";
+import Navigation from "./Navigation.js"
 
-    this.setState({
-      isRoomCreator: true,
-      isDisabled: true, //Disable the 'Create' button
-      myTurn: true, // Room creator goes first
-    });
-  }
 
-  // The 'Join' button was pressed
-  onPressJoin = (e) => {
-    Swal.fire({
-      position: 'top',
-      input: 'text',
-      allowOutsideClick: false,
-      inputPlaceholder: 'Enter the room id',
-      showCancelButton: true,
-      confirmButtonColor: 'rgb(208,33,41)',
-      confirmButtonText: 'OK',
-      width: 275,
-      padding: '0.7em',
-      customClass: {
-        heightAuto: false,
-        popup: 'popup-class',
-        confirmButton: 'join-button-class ',
-        cancelButton: 'join-button-class'
-      }
-    }).then((result)=>{
-      //Check if the user typed a value in the input field
-      if(result.value){
-        this.joinRoom(result.value);
-      }
-    })
-  }
-
-  joinRoom = (value) => {
-    this.roomId = value;
-    this.lobbyChannel = 'schrodingercheckers--' + this.roomId;
-
-    //Check the number of people in the channel
-    this.pubnub.hereNow({
-      channels: [this.lobbyChannel],
-    }).then((response)=>{
-      if(response.totalOccupancy < 2){
-        this.pubnub.subscribe({
-          channels: [this.lobbyChannel],
-          withPresence: true
-        });
-
-        this.pubnub.publish({
-          message:{
-            notRoomCreator: true,
-            gameReady: true,
-          },
-          channel: this.lobbyChannel
-        }).then((response)=>{
-          // after publish response goes through
-          if(!response.error){
-            this.subscribeToGameChannel();
-            this.setState({
-              gameReady: true,
-            })
-          }else{
-            console.log(response.error)
-          }
-        });
-      }
-      else{
-        // Game in progress
-        Swal.fire({
-          position: 'top',
-          allowOutsideClick: false,
-          title: 'Error',
-          text: 'Game in progress. Try another room.',
-          width: 275,
-          padding: '0.7em',
-          customClass: {
-              heightAuto: false,
-              title: 'title-class',
-              popup: 'popup-class',
-              confirmButton: 'button-class'
-          }
-        })
-      }
-    }).catch((error)=>{
-      console.log(error)
-    });
-  }
-
-  // Reset everything
-  endGame = () => {
-    this.setState({
-      isPlaying: false,
-      isRoomCreator: false,
-      isDisabled: false,
-      myTurn: false,
-    });
-
-    this.lobbyChannel = null;
-    this.gameChannel = null;
-    this.roomId = null;
-
-    this.pubnub.unsubscribe({
-      channels : [this.lobbyChannel, this.gameChannel]
-    });
-  }
-  render(){
-    let game_board;
-    if(this.state.gameReady){
-      // if(true){
-      game_board = <GameBoard gameChannel = {this.gameChannel} pubnub = {this.pubnub} myTurn = {this.state.myTurn}/>;
-    }
-    return(
-      <Router>
-      <div>
-        <div className="button-container">
-          <button
-            className="create-button "
-            disabled={this.state.isDisabled}
-            onClick={(e) => this.onPressCreate()}
-            > Create
-          </button>
-          <button
-            className="join-button"
-            onClick={(e) => this.onPressJoin()}
-            > Join
-          </button>
-          <button
-            onClick={(e)=> this.onPressHereNow()}
-            >
-              Here Now
-            </button>
-        </div>
-      </div>
-
+function App() {
+  return (
+    <Router>
+      {/* NAVIGATION BAR */}
+      <Navigation />
+      {/* MAIN DISPLAY AREA */}
+      <Container className="mt-3">
         <Switch>
-          <Route path="/hiscores" component={HiScores} />
-          <Route path="/userprofile" component={UserProfile} />
+          <Route path="/game">
+            <Game />
+          </Route>
+          <Route path="/rankings">
+            <Rankings />
+          </Route>
+          <Route path="/profile">
+            <Profile />
+          </Route>
+          <Route path="/">
+            <Home />
+          </Route>
         </Switch>
-        {game_board}
-      </Router>
-    )
-  }
+      </Container>
+    </Router>
+  );
 }
-
 export default App;

@@ -36,15 +36,3 @@
     transform: rotate(360deg);
   }
 }
-
-h1 {
-  font-size: 50px;
-  color: #847bf7;
-  text-transform: uppercase;
-  font-weight: normal;
-  line-height: 1;
-  text-align: center;
-  margin: 0px 50px 0 50px;
-  padding-top: -60px;
-
-}
