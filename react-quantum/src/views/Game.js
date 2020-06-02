@@ -53,8 +53,8 @@ class Game extends React.Component {
         key={this.state.gameBoard.links[key].linkID}
         className="link"
         style={{
-          top: 12.5 + 25 * fromRow + 13 * (toRow - fromRow) + "%",
-          left: 12.5 + 25 * fromCol + 13 * (toCol - fromCol) + "%",
+          top: (12.5 + 25 * fromRow + 13 * (toRow - fromRow)) + "%",
+          left: (12.5 + 25 * fromCol + 13 * (toCol - fromCol)) + "%",
         }}
       >
         {arrow}
@@ -85,12 +85,11 @@ class Game extends React.Component {
       <Container>
         <Row>
           <Col>P1 Cards (TODO)</Col>
-          <Col xs={6}>
+          <Col xs={6} className='gameboard'>
             <Row>
               {this.renderBoard()}
               {this.renderLinks()}
             </Row>
-            <Row>Buttons (TODO)</Row>
           </Col>
           <Col>P2 Cards (TODO)</Col>
         </Row>
