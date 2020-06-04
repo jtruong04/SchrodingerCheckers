@@ -1,24 +1,3 @@
-.tile {
-    width: 23%; /* 100% / 4 squares = 25%, 5% subtracted for margin */
-    /* padding-bottom: 23%; */
-    margin: 1%; /* That 5% is split for left/right and top/bottom */
-    border: 2px solid black;
-}
-.tile:after {
-    content: "";
-    display: block;
-    padding-bottom: 100%;
-}
-
-
-.whiteTile {
-    background: white;
-}
-
-.blackTile {
-    background: black;
-}
-
 .link {
     z-index: 5;
     width: 30px;
@@ -31,10 +10,3 @@
     justify-content: center;
     align-items: center;
 }
-
-/* .gameboard {
-    background: red;
-    /* padding-bottom:100%;
-    height: 0;
-} */
-
