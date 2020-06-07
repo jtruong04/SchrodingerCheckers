@@ -4,6 +4,10 @@ import Button from "react-bootstrap/Button";
 // Import commands
 import FlipTileButton from './command_buttons/FlipTileButton.js'
 
+// List of props available:
+// this.props.state    : entire game state
+// this.props.setState : callback function to change game state
+
 class CommandManager extends React.Component {
   constructor(props) {
     super(props);

@@ -1,11 +1,15 @@
 import Command from './Command'
 
-class FlipTileCommand extends Command {
+/**
+ * This object when executed computes the new state after flipping all tiles in 
+ * given an initial state. The tiles flipped are given to it during construction.
+ * Since tiles are two sided, undo is just executing the same command again.
+ */
+
+class FlipTilesCommand extends Command {
     constructor(tilesFlipped) {
         super();
         this.tilesFlipped = tilesFlipped;
-        this.execute = this.execute.bind(this);
-        this.undo = this.undo.bind(this);
     }
 
     execute(state) {
@@ -19,7 +23,6 @@ class FlipTileCommand extends Command {
     undo(state) {
         return this.execute(state);
     }
-
 }
 
-export default FlipTileCommand
+export default FlipTilesCommand

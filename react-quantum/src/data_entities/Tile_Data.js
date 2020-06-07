@@ -1,13 +1,11 @@
 class Tile_Data {
-    constructor(){
-        this.tileID = Tile_Data.count;
-        Tile_Data.count++;
+    constructor({tileID, randomize = false}){
+        this.tileID = tileID;
 
-        this.state = (Math.floor(Math.random() * 2) === 0); // Initialize to random state. TODO: Set to false when interactivity is implemented
-        this.isButton = false;
+        this.state = randomize ? (Math.floor(Math.random() * 2) === 0) : false;
         
+        this.isButton = false;
         this.onClickCallback = null;
-        // this.onClickCallback = this.onClickCallback.bind(this);
     }
 }
 

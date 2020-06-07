@@ -3,12 +3,8 @@ import Button from 'react-bootstrap/Button'
 
 import './Tile.css'
 
-/**
- * 
- * Props to include:
- *    tile: Tile_Data
- * 
- */
+// List of props available:
+// this.props.tile : tile data
 
 class Tile extends React.Component {
 

@@ -2,25 +2,20 @@ import Tile_Data from "./Tile_Data.js";
 // import Link_Data from "./Link_Data.js";
 
 class Board_Data {
-  constructor(boardSize = 4) {
+  constructor({boardSize = 4, randomizeTiles = false}) {
 
     this.boardSize = boardSize;
 
     this.tiles = [];
-    this.links = new Map(); // key is of type int, value is list of ints, ints are tileIDs
+    this.links = new Map(); // key is of type int (tileID), value is list of ints (tileIDs)
     
+    // These properties allow the board as a whole to be a button.
     this.isButton = false;
     this.onClickCallback = null;
 
-    // Initialize counts to zero. When Tiles and Links are created, they use
-    // this to obtain a unique ID. These prevent the unique key warning that
-    // React throws when rendering. Can also be used in other stuff too.
-    Tile_Data.count = 0;
-    // Link_Data.count = 0;
-
-    // Fill tile array
+    // Fill tile array, we pass the array index to the tile to also serve as the tileID.
     for (let i = 0; i < this.boardSize**2; i++) {
-      this.tiles.push(new Tile_Data());
+      this.tiles.push(new Tile_Data({tileID:i, randomize:randomizeTiles}));
     }
   }
 }
