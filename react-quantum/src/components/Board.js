@@ -5,7 +5,8 @@ import Tile from './Tile.js'
 
 class Board extends React.Component {
   render() {
-    return this.props.board.tiles.flat().map((tile)=> (
+    // console.log("Board props:", this.props.board.tiles)
+    return this.props.board.tiles.map((tile)=> (
       <Tile 
         key={tile.tileID}
         tile={tile}
