@@ -95,8 +95,8 @@ class Game extends React.Component {
         <Row>
           <CommandManager 
             setState={this.setState}
-            board={this.state.gameBoard}
-            players={this.state.players}
+            // board={this.state.gameBoard}
+            state={this.state}
           />
         </Row>
       </Container>
