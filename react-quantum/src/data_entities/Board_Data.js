@@ -20,11 +20,6 @@ class Board_Data {
       this.tiles.push(new Tile_Data({ tileID: i, randomize: randomizeTiles }));
       this.links.set(i, new Set());
     }
-    // Test LInks
-    this.links.get(0).add(1);
-    this.links.get(0).add(4);
-    this.links.get(6).add(5);
-    // console.log(this.links)
   }
 }
 
