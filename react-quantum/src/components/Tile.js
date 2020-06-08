@@ -18,27 +18,14 @@ class Tile extends React.Component {
   }
 
   render() {
-    if(this.props.tile.onClickCallback != null) {
-      return (
-        <Button
-            key={this.props.tile.tileID}
-            bsPrefix={"tile " +
-              (this.props.tile.state ? "blackTile" : "whiteTile") + " " +
-              (this.props.tile.isButton ? 'selectableTile' : '')}
-            onClick={this.handleClick}
-        ></Button>
-      );
-    } else {
-      return (
-        <div
-          className={
-            "tile " +
-            (this.props.tile.state ? "blackTile" : "whiteTile") + " " +
-            (this.props.tile.isButton ? 'selectableTile' : '')
-          }
-        ></div>
-      );
-    }
+    return (
+      <Button
+        bsPrefix={"tile " +
+          (this.props.tile.state ? "blackTile" : "whiteTile") + " " +
+          (this.props.tile.onClickCallback ? 'selectableTile' : '')}
+        onClick={this.props.tile.onClickCallback ? this.handleClick : null}
+      ></Button>
+    );
   }
 
 }

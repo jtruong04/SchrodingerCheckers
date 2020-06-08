@@ -1,0 +1,15 @@
+.link {
+    z-index: 5;
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    text-align: center;
+    font-size: calc(2% + 2vw + 2vh);
+    transform: translate(-50%,-50%);
+    color: red;
+    background: #0000;
+    border: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,16 +1,12 @@
 .tile {
-    width: 23%; /* 100% / 4 squares = 25%, 5% subtracted for margin */
+    width: 23%;
     /* padding-bottom: 23%; */
-    margin: 1%; /* That 5% is split for left/right and top/bottom */
+    margin: 1%;
+    position: relative;
     border: 2px solid black;
+    overflow: hidden;
+    padding: 0 0 calc(23% - 4px) 0;
 }
-
-.tile:after {
-    content: "";
-    display: block;
-    padding-bottom: 100%;
-}
-
 
 .whiteTile {
     background: white;
@@ -21,6 +17,6 @@
 }
 
 .selectableTile {
-    box-shadow: 1px 1px 2px 1px red,
-                -1px -1px 2px 1px red;
+    box-shadow: 1px 1px 2px 1px blue,
+                -1px -1px 2px 1px blue;
 }
