@@ -24,8 +24,8 @@ class Game extends React.Component {
     this.state = {
       gameBoard: new Board_Data({ size: config.boardSize, randomizeTiles: false }),
       players: [
-        new Player_Data({ numBoards: config.numberTargetCards }),
-        new Player_Data({ numBoards: config.numberTargetCards }),
+        new Player_Data({ numBoards: config.numberTargetCards, size: config.boardSize }),
+        new Player_Data({ numBoards: config.numberTargetCards, size: config.boardSize }),
       ],
       actionPoints: config.startingActionPoints,
       currentPlayer: 0
