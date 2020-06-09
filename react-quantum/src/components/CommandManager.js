@@ -7,7 +7,7 @@ import CreateLinkButton from './command_buttons/CreateLinkButton.js'
 import DeleteLinkButton from "./command_buttons/DeleteLinkButton.js";
 
 import config from '../config.json'
-
+import { remove } from 'lodash';
 // List of props available:
 // this.props.state    : entire game state
 // this.props.setState : callback function to change game state
@@ -35,6 +35,15 @@ class CommandManager extends React.Component {
     // console.log(command.cost);
     let newState = command.execute(this.props.state);
     newState.actionPoints -= command.cost;
+    this.props.setState(newState);
+    this.removeMatchingBoards();
+  }
+
+  removeMatchingBoards() {
+    let newState = this.props.state;
+    newState.players.forEach(player => {
+      remove(player.targetBoards, this.props.state.gameBoard.isEqual);
+    })
     this.props.setState(newState);
   }
 
@@ -69,7 +78,7 @@ class CommandManager extends React.Component {
   }
 
   render() {
-    console.log(config.actionCosts.FlipTile > this.props.state.actionPoints);
+    // console.log(config.actionCosts.FlipTile > this.props.state.actionPoints);
     return (
       <>
         <FlipTileButton

@@ -39,7 +39,7 @@ class CreateLinkButton extends React.Component {
     changeStateRequestAdjacentTile(tile) {
         let newBoard = this.props.state.gameBoard;
         this.src = tile.tileID;
-        const size = this.props.state.gameBoard.boardSize;
+        const size = this.props.state.gameBoard.size;
         newBoard.tiles.forEach((tile) => {
           tile.onClickCallback = null;
         });

@@ -1,8 +1,11 @@
 import React from 'react';
 
-import Tile from './Tile.js'
-import Link from './Link.js'
+import Tile from './Tile.js';
+import Link from './Link.js';
 
+import Row from 'react-bootstrap/Row';
+
+import './Board.css';
 // List of props available:
 // this.props.board : the game board
 
@@ -15,7 +18,7 @@ class Board extends React.Component {
         <Tile
           key={tile.tileID}
           tile={tile}
-          size={this.props.board.boardSize}
+          size={this.props.board.size}
         />
       ))
     )
@@ -30,10 +33,10 @@ class Board extends React.Component {
         (dest) => (
           renderedLinks.push(
             <Link
-              key={(src * this.props.board.boardSize * this.props.board.boardSize) + dest}
+              key={(src * this.props.board.size * this.props.board.size) + dest}
               to={dest}
               from={src}
-              boardSize={this.props.board.boardSize}
+              boardSize={this.props.board.size}
               onClickCallback={this.props.board.linksOnClickCallback}
               isButton={this.props.board.linksIsButton}
             />
@@ -47,10 +50,10 @@ class Board extends React.Component {
 
   render() {
     return (
-      <>
+      <Row className='gameBoard'>
       {this.renderBoard()}
       {this.renderLinks()}
-      </>
+      </Row>
     );
   }
 }

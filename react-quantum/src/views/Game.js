@@ -9,7 +9,7 @@ import Player_Data from '../data_entities/Player_Data'
 
 // Components
 import Board from "../components/Board.js"
-// import Player from "../components/Player.js";
+import Player from "../components/Player.js";
 import CommandManager from '../components/CommandManager'
 
 // CSS Styling
@@ -22,7 +22,7 @@ class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      gameBoard: new Board_Data({ boardSize: config.boardSize, randomizeTiles: false }),
+      gameBoard: new Board_Data({ size: config.boardSize, randomizeTiles: false }),
       players: [
         new Player_Data({ numBoards: 3 }),
         new Player_Data({ numBoards: 3 }),
@@ -40,13 +40,21 @@ class Game extends React.Component {
       <Container>
         <Row>
           <Col></Col>
-          <Col xs={6} className='gameBoard'>
-            <Row>
+          <Player player={this.state.players[1]} />
+          <Col></Col>
+        </Row>
+        <Row>
+          <Col></Col>
+          <Col xs={6}>
               <Board 
                 board = {this.state.gameBoard}
               />
-            </Row>
           </Col>
+          <Col></Col>
+        </Row>
+        <Row>
+          <Col></Col>
+          <Player player={this.state.players[0]} />
           <Col></Col>
         </Row>
         <Row>
