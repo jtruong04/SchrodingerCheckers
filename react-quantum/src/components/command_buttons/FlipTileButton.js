@@ -39,19 +39,22 @@ class FlipTileButton extends React.Component {
   }
 
   receiveTile(tile) {
-    let setOfFlippedTiles =  this.computeFlippedTiles(tile.tileID, new Set());
+    let setOfFlippedTiles = this.computeFlippedTiles([tile.tileID], new Set());
     this.createCommand(setOfFlippedTiles);
   }
 
-  computeFlippedTiles(tileID, alreadySearchedTiles){
-    let searchedTiles = alreadySearchedTiles;
-    searchedTiles.add(tileID);
-    this.links.get(tileID).forEach((tile) => {
+  computeFlippedTiles(searchQueue, searchedTiles){
+    if(searchQueue.length === 0) {
+      return searchedTiles;
+    }
+    let currentTile = searchQueue.shift();
+    searchedTiles.add(currentTile);
+    this.links.get(currentTile).forEach((tile) => {
       if(!searchedTiles.has(tile)) {
-        searchedTiles = new Set(searchedTiles, this.computeFlippedTiles(tile, searchedTiles))
+        searchQueue.push(tile);
       }
     })
-    return searchedTiles;
+    return this.computeFlippedTiles(searchQueue, searchedTiles);
   }
 
   createCommand(listOfTiles) {
