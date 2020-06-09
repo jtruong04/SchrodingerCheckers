@@ -1,7 +1,9 @@
 import Command from './Command'
 
 /**
- * This object when executed creates a new link
+ * This object when executed creates a new link. It is 
+ * given the source and destination tiles and a link is
+ * created between them.
  */
 
 class CreateLinkCommand extends Command {

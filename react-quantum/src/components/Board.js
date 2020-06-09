@@ -15,6 +15,7 @@ class Board extends React.Component {
         <Tile
           key={tile.tileID}
           tile={tile}
+          size={this.props.board.boardSize}
         />
       ))
     )

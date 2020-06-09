@@ -20,7 +20,7 @@ class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      gameBoard: new Board_Data({ boardSize: 4, randomizeTiles: false }),
+      gameBoard: new Board_Data({ boardSize: 6, randomizeTiles: false }),
       players: [
         new Player_Data({ numBoards: 3 }),
         new Player_Data({ numBoards: 3 }),

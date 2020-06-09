@@ -3,13 +3,12 @@ import Button from 'react-bootstrap/Button'
 
 import CreateLinkCommand from '../../data_entities/commands/CreateLinkCommand'
 import {indexMapper1to2, indexMapper2to1} from '../../helper/indexMapper'
+
 /**
- * 
  * This button when clicked first requests a tile. It does so by changing all tiles
- * to a button and giving them a callback function computeFlippedTiles. The clicked
- * tile then returns itself to the callback. It then asks for a second tile adjacent
- * to the first.
- * 
+ * to a button and giving them a callback function changeStateRequestAdjacentTile. 
+ * The clicked tile then returns itself to the callback. It then asks for a second 
+ * tile adjacent to the first.
  */
 
 // List of props available:
@@ -17,18 +16,17 @@ import {indexMapper1to2, indexMapper2to1} from '../../helper/indexMapper'
 // this.props.setState                  : callback function to change game state
 // this.props.appendToHistoryAndExecute : callback function to commit command to history and execute
 
-class FlipTileButton extends React.Component {
+class CreateLinkButton extends React.Component {
     constructor() {
         super();
         this.changeStateRequestTile = this.changeStateRequestTile.bind(this);
         this.changeStateRequestAdjacentTile = this.changeStateRequestAdjacentTile.bind(this);
-        this.determineLink = this.determineLink.bind(this);
+        this.receiveDestination = this.receiveDestination.bind(this);
         this.src = null;
         this.dst = null;
     }
 
     changeStateRequestTile(e) {
-        // alert('Click first tile');
         let newBoard = this.props.state.gameBoard;
         newBoard.tiles.flat().forEach((tile) => {
             tile.onClickCallback = this.changeStateRequestAdjacentTile;
@@ -37,17 +35,18 @@ class FlipTileButton extends React.Component {
     }
 
     changeStateRequestAdjacentTile(tile) {
-        // alert('Click second tile');
         let newBoard = this.props.state.gameBoard;
         this.src = tile.tileID;
         const size = this.props.state.gameBoard.boardSize;
-        this.changeStateRemoveCallback();
-        let [row, col] = indexMapper1to2(this.src, size);
+        newBoard.tiles.forEach((tile) => {
+          tile.onClickCallback = null;
+        });
+        const [row, col] = indexMapper1to2(this.src, size);
         let adjacentTiles = [];
         if( row > 0 ) {
             adjacentTiles.push(indexMapper2to1(row-1, col, size));
         }
-        if (row < size-1) {
+        if (row < size - 1) {
             adjacentTiles.push(indexMapper2to1(row+1, col, size));
         }
         if (col > 0) {
@@ -57,12 +56,12 @@ class FlipTileButton extends React.Component {
             adjacentTiles.push(indexMapper2to1(row, col+1, size));
         }
         adjacentTiles.forEach((adjTileID) => {
-            newBoard.tiles[adjTileID].onClickCallback = this.determineLink;
+            newBoard.tiles[adjTileID].onClickCallback = this.receiveDestination;
         });
         this.props.setState({ gameBoard: newBoard });       
     }
 
-    determineLink(tile) {
+    receiveDestination(tile) {
         this.dst = tile.tileID;
         this.createCommand();
     }
@@ -85,4 +84,4 @@ class FlipTileButton extends React.Component {
     }
 }
 
-export default FlipTileButton;
+export default CreateLinkButton;

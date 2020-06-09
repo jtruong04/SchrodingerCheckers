@@ -5,11 +5,11 @@ class Command {
     }
 
     execute(state) {
-        return null;
+        return state;
     }
 
     undo(state) {
-        return null;
+        return state;
     }
 
 }

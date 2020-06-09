@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button";
 // Import commands
 import FlipTileButton from './command_buttons/FlipTileButton.js'
 import CreateLinkButton from './command_buttons/CreateLinkButton.js'
+import DeleteLinkButton from "./command_buttons/DeleteLinkButton.js";
 
 // List of props available:
 // this.props.state    : entire game state
@@ -62,6 +63,11 @@ class CommandManager extends React.Component {
           appendToHistoryAndExecute={this.addCommand}
         />
         <CreateLinkButton
+          setState={this.props.setState}
+          state={this.props.state}
+          appendToHistoryAndExecute={this.addCommand}
+        />
+        <DeleteLinkButton
           setState={this.props.setState}
           state={this.props.state}
           appendToHistoryAndExecute={this.addCommand}
