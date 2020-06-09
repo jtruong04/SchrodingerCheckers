@@ -18,6 +18,8 @@ import FlipTilesCommand from '../../data_entities/commands/FlipTilesCommand'
 // this.props.state                     : entire game state
 // this.props.setState                  : callback function to change game state
 // this.props.appendToHistoryAndExecute : callback function to commit command to history and execute
+// this.props.cost                      : cost in action points
+// this.props.disabled                  : button state
 
 class FlipTileButton extends React.Component {
   constructor(props) {
@@ -66,7 +68,10 @@ class FlipTileButton extends React.Component {
   }
 
   render() {
-    return <Button onClick={this.changeStateRequestTile}>Flip Tile</Button>;
+    return <Button 
+        disabled={this.props.disabled}
+        onClick={this.changeStateRequestTile}
+    >Flip Tile ({this.props.cost})</Button>;
   }
 }
 
