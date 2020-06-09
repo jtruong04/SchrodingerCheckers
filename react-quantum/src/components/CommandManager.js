@@ -6,6 +6,8 @@ import FlipTileButton from './command_buttons/FlipTileButton.js'
 import CreateLinkButton from './command_buttons/CreateLinkButton.js'
 import DeleteLinkButton from "./command_buttons/DeleteLinkButton.js";
 
+import config from '../config.json'
+
 // List of props available:
 // this.props.state    : entire game state
 // this.props.setState : callback function to change game state
@@ -30,6 +32,7 @@ class CommandManager extends React.Component {
   }
 
   execute(command) {
+    console.log(command.cost);
     let newState = command.execute(this.props.state);
     this.props.setState(newState);
   }
@@ -61,16 +64,19 @@ class CommandManager extends React.Component {
           setState={this.props.setState}
           state={this.props.state}
           appendToHistoryAndExecute={this.addCommand}
+          cost={config.actionCosts.FlipTile}
         />
         <CreateLinkButton
           setState={this.props.setState}
           state={this.props.state}
           appendToHistoryAndExecute={this.addCommand}
+          cost={config.actionCosts.CreateLink}
         />
         <DeleteLinkButton
           setState={this.props.setState}
           state={this.props.state}
           appendToHistoryAndExecute={this.addCommand}
+          cost={config.actionCosts.DeleteLink}
         />
         <Button onClick={this.undo}>Undo</Button>
         <Button onClick={this.redo}>Redo</Button>

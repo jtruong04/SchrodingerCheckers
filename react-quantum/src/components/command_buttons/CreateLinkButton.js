@@ -15,6 +15,7 @@ import {indexMapper1to2, indexMapper2to1} from '../../helper/indexMapper'
 // this.props.state                     : entire game state
 // this.props.setState                  : callback function to change game state
 // this.props.appendToHistoryAndExecute : callback function to commit command to history and execute
+// this.props.cost                      : action cost
 
 class CreateLinkButton extends React.Component {
     constructor() {
@@ -67,7 +68,7 @@ class CreateLinkButton extends React.Component {
     }
 
     createCommand() {
-        this.props.appendToHistoryAndExecute(new CreateLinkCommand(this.src, this.dst));
+        this.props.appendToHistoryAndExecute(new CreateLinkCommand(this.props.cost, this.src, this.dst));
         this.changeStateRemoveCallback();
     }
 

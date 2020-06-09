@@ -53,7 +53,7 @@ class FlipTileButton extends React.Component {
   }
 
   createCommand(listOfTiles) {
-    this.props.appendToHistoryAndExecute(new FlipTilesCommand(listOfTiles));
+    this.props.appendToHistoryAndExecute(new FlipTilesCommand(this.props.cost, listOfTiles));
     this.changeStateRemoveCallback();
   }
 

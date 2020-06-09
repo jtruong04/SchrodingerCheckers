@@ -37,7 +37,7 @@ class DeleteLinkButton extends React.Component {
     }
 
     createCommand() {
-        this.props.appendToHistoryAndExecute(new DeleteLinkCommand(this.src, this.dst));
+        this.props.appendToHistoryAndExecute(new DeleteLinkCommand(this.props.cost, this.src, this.dst));
         this.changeStateRemoveCallback();
     }
 

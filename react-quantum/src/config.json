@@ -1,0 +1,9 @@
+{
+    "boardSize"           : 4,
+    "startingActionPoints": 3,
+    "actionCosts"         : {
+        "FlipTile"  : 1,
+        "CreateLink": 1,
+        "DeleteLink": 2
+    }
+}

@@ -7,8 +7,8 @@ import Command from './Command'
  */
 
 class FlipTilesCommand extends Command {
-    constructor(tilesFlipped) {
-        super();
+    constructor(cost, tilesFlipped) {
+        super(cost);
         this.tilesFlipped = tilesFlipped;
     }
 

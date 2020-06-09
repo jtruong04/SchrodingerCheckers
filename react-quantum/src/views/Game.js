@@ -11,16 +11,20 @@ import Player_Data from '../data_entities/Player_Data'
 
 // Components
 import Board from "../components/Board.js"
+import Player from "../components/Player.js";
 import CommandManager from '../components/CommandManager'
 
 // CSS Styling
 import './Game.css'
 
+// Config
+import config from '../config.json';
+
 class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      gameBoard: new Board_Data({ boardSize: 3, randomizeTiles: false }),
+      gameBoard: new Board_Data({ boardSize: config.boardSize, randomizeTiles: false }),
       players: [
         new Player_Data({ numBoards: 3 }),
         new Player_Data({ numBoards: 3 }),

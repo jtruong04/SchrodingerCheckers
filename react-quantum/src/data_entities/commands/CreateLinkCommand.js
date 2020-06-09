@@ -7,8 +7,8 @@ import Command from './Command'
  */
 
 class CreateLinkCommand extends Command {
-    constructor(src, dst) {
-        super();
+    constructor(cost, src, dst) {
+        super(cost);
         this.src = src;
         this.dst = dst;
     }

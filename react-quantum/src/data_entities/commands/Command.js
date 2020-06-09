@@ -1,7 +1,8 @@
 class Command {
-    constructor() {
+    constructor(cost) {
         this.execute = this.execute.bind(this);
         this.undo = this.undo.bind(this);
+        this.cost = cost;
     }
 
     execute(state) {
@@ -11,7 +12,6 @@ class Command {
     undo(state) {
         return state;
     }
-
 }
 
 export default Command;
