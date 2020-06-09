@@ -20,25 +20,36 @@ import FlipTilesCommand from '../../data_entities/commands/FlipTilesCommand'
 // this.props.appendToHistoryAndExecute : callback function to commit command to history and execute
 
 class FlipTileButton extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props)
     this.changeStateRequestTile = this.changeStateRequestTile.bind(this);
+    this.receiveTile = this.receiveTile.bind(this);
+    this.links = props.state.gameBoard.links;
   }
 
   changeStateRequestTile(e) {
     let newBoard = this.props.state.gameBoard;
     newBoard.tiles.flat().forEach((tile) => {
-      tile.onClickCallback = this.computeFlippedTiles.bind(this);
+      tile.onClickCallback = this.receiveTile.bind(this);
     });
     this.props.setState({ gameBoard: newBoard });
   }
 
-  computeFlippedTiles(tile) {
-    // const listOfAllTiles = this.props.gameBoard.tiles;
-    // const listOfLinks = this.props.gameBoard.links;
-    let listOfFlippedTiles = [tile.tileID];
-    // TODO: Find all flipped tiles;
-    this.createCommand(listOfFlippedTiles);
+  receiveTile(tile) {
+    let setOfFlippedTiles =  this.computeFlippedTiles(tile.tileID, new Set());
+    this.createCommand(setOfFlippedTiles);
+  }
+
+  computeFlippedTiles(tileID, alreadySearchedTiles){
+    let searchedTiles = alreadySearchedTiles;
+    searchedTiles.add(tileID);
+    this.links.get(tileID).forEach((tile) => {
+      if(!searchedTiles.has(tile)) {
+        searchedTiles = new Set(searchedTiles, this.computeFlippedTiles(tile, searchedTiles))
+      }
+    })
+    // console.log(tileID, searchedTiles);
+    return searchedTiles;
   }
 
   createCommand(listOfTiles) {

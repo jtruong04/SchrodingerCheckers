@@ -47,7 +47,7 @@ class Link extends React.Component {
 
   calculatePosition(fromRow, fromCol, toRow, toCol) {
     let xShift = 0, yShift = 0;
-    const shift = 2;
+    const shift = 4;
     if (toRow - fromRow === 1) {
       xShift = -shift;
     } else if (toRow - fromRow === -1) {

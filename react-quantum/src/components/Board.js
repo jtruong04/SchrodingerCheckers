@@ -25,19 +25,22 @@ class Board extends React.Component {
     const mapOfLinks = this.props.board.links;
     let renderedLinks = []
     
-    mapOfLinks.forEach( (destList, src) => (
-      destList.forEach((dest)=>(
-        // console.log(src, dest, src * this.boardSize ^ 2 + dest),
-        renderedLinks.push(<Link
-          key={src * this.boardSize^2 + dest }
-          to={dest}
-          from={src}
-          boardSize={this.props.board.boardSize}
-          onClickCallback = {this.props.board.linksOnClickCallback}
-          isButton = {this.props.board.linksIsButton}
-        />)
-      ))
-    ))
+    mapOfLinks.forEach((destList, src) =>
+      destList.forEach(
+        (dest) => (
+          renderedLinks.push(
+            <Link
+              key={(src * this.props.board.boardSize * this.props.board.boardSize) + dest}
+              to={dest}
+              from={src}
+              boardSize={this.props.board.boardSize}
+              onClickCallback={this.props.board.linksOnClickCallback}
+              isButton={this.props.board.linksIsButton}
+            />
+          )
+        )
+      )
+    );
 
     return renderedLinks;
   }
