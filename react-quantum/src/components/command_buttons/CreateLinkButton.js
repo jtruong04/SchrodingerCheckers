@@ -15,6 +15,7 @@ import {indexMapper1to2, indexMapper2to1} from '../../helper/indexMapper'
 // this.props.state                     : entire game state
 // this.props.setState                  : callback function to change game state
 // this.props.appendToHistoryAndExecute : callback function to commit command to history and execute
+// this.props.resetState                : callback to remove all request stylings
 // this.props.cost                      : cost in action points
 // this.props.disabled                  : button state
 
@@ -29,6 +30,7 @@ class CreateLinkButton extends React.Component {
     }
 
     changeStateRequestTile(e) {
+        this.props.resetState();
         let newBoard = this.props.state.gameBoard;
         newBoard.tiles.flat().forEach((tile) => {
             tile.onClickCallback = this.changeStateRequestAdjacentTile;
@@ -70,15 +72,7 @@ class CreateLinkButton extends React.Component {
 
     createCommand() {
         this.props.appendToHistoryAndExecute(new CreateLinkCommand(this.props.cost, this.src, this.dst));
-        this.changeStateRemoveCallback();
-    }
-
-    changeStateRemoveCallback() {
-        let newBoard = this.props.state.gameBoard;
-        newBoard.tiles.forEach((tile) => {
-            tile.onClickCallback = null;
-        });
-        this.props.setState({ gameBoard: this.props.state.gameBoard });
+        this.props.resetState();
     }
 
     render() {

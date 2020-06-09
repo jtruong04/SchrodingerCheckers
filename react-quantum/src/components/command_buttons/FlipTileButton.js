@@ -30,6 +30,7 @@ class FlipTileButton extends React.Component {
   }
 
   changeStateRequestTile(e) {
+    this.props.resetState();
     let newBoard = this.props.state.gameBoard;
     newBoard.tiles.flat().forEach((tile) => {
       tile.onClickCallback = this.receiveTile.bind(this);
@@ -50,21 +51,12 @@ class FlipTileButton extends React.Component {
         searchedTiles = new Set(searchedTiles, this.computeFlippedTiles(tile, searchedTiles))
       }
     })
-    // console.log(tileID, searchedTiles);
     return searchedTiles;
   }
 
   createCommand(listOfTiles) {
     this.props.appendToHistoryAndExecute(new FlipTilesCommand(this.props.cost, listOfTiles));
-    this.changeStateRemoveCallback();
-  }
-
-  changeStateRemoveCallback() {
-    let newBoard = this.props.state.gameBoard;
-    newBoard.tiles.forEach((tile) => {
-      tile.onClickCallback = null;
-    });
-    this.props.setState({ gameBoard: this.props.state.gameBoard });
+    this.props.resetState();
   }
 
   render() {

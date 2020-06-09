@@ -20,13 +20,12 @@ class DeleteLinkButton extends React.Component {
         super();
         this.changeStateRequestLink = this.changeStateRequestLink.bind(this);
         this.receiveLink = this.receiveLink.bind(this);
-        // this.changeStateRequestAdjacentTile = this.changeStateRequestAdjacentTile.bind(this);
-        // this.receiveDestination = this.receiveDestination.bind(this);
         this.src = null;
         this.dst = null;
     }
 
     changeStateRequestLink(e) {
+        this.props.resetState();
         let newBoard = this.props.state.gameBoard;
         newBoard.linksOnClickCallback = this.receiveLink;
         this.props.setState({ gameBoard: newBoard });
@@ -40,13 +39,7 @@ class DeleteLinkButton extends React.Component {
 
     createCommand() {
         this.props.appendToHistoryAndExecute(new DeleteLinkCommand(this.props.cost, this.src, this.dst));
-        this.changeStateRemoveCallback();
-    }
-
-    changeStateRemoveCallback() {
-        let newBoard = this.props.state.gameBoard;
-        newBoard.linksOnClickCallback = null;
-        this.props.setState({ gameBoard: newBoard });
+        this.props.resetState();
     }
 
     render() {

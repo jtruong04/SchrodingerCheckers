@@ -11,7 +11,7 @@ class Board_Data {
 
     this.tiles = [];
 
-    this.links = new Map(); // key is of type int (tileID), value is list of tileIds
+    this.links = new Map(); // key is of type int (tileID), value is set of tileIds
     this.linksOnClickCallback = null;
     this.linksIsButton = false;
 
@@ -25,7 +25,6 @@ class Board_Data {
   }
 
   isEqual(board) {
-    // console.log("Comparing ", board, this.tiles)
     if( this.size !== board.size) {
       return false;
     };

@@ -1,6 +1,7 @@
 {
     "boardSize"           : 4,
     "startingActionPoints": 3,
+    "numberTargetCards"   : 3,
     "actionCosts"         : {
         "FlipTile"  : 1,
         "CreateLink": 1,

@@ -16,7 +16,9 @@ class CommandManager extends React.Component {
   constructor(props) {
     super(props);
     this.history = [];
+    this.globalHistory = [];
     this.addCommand = this.addCommand.bind(this);
+    this.resetState = this.resetState.bind(this);
     this.undo = this.undo.bind(this);
     this.redo = this.redo.bind(this);
     this.endTurn = this.endTurn.bind(this);
@@ -71,14 +73,27 @@ class CommandManager extends React.Component {
   }
 
   endTurn() {
+
     let turnState = this.props.state;
     turnState.actionPoints = config.startingActionPoints;
     turnState.currentPlayer = (turnState.currentPlayer + 1)%2;
     this.props.setState(turnState);
+
+    this.globalHistory.push(this.history);
+    this.history = [];
+    this.currentTime = 0;
+  }
+
+  resetState() {
+    let newBoard = this.props.state.gameBoard;
+    newBoard.tiles.forEach((tile) => {
+      tile.onClickCallback = null;
+    });
+    newBoard.linksOnClickCallback = null;
+    this.props.setState({ gameBoard: this.props.state.gameBoard });
   }
 
   render() {
-    // console.log(config.actionCosts.FlipTile > this.props.state.actionPoints);
     return (
       <>
         <FlipTileButton
@@ -86,6 +101,7 @@ class CommandManager extends React.Component {
           setState={this.props.setState}
           state={this.props.state}
           appendToHistoryAndExecute={this.addCommand}
+          resetState={this.resetState}
           cost={config.actionCosts.FlipTile}
         />
         <CreateLinkButton
@@ -93,6 +109,7 @@ class CommandManager extends React.Component {
           setState={this.props.setState}
           state={this.props.state}
           appendToHistoryAndExecute={this.addCommand}
+          resetState={this.resetState}
           cost={config.actionCosts.CreateLink}
         />
         <DeleteLinkButton
@@ -100,6 +117,7 @@ class CommandManager extends React.Component {
           setState={this.props.setState}
           state={this.props.state}
           appendToHistoryAndExecute={this.addCommand}
+          resetState={this.resetState}
           cost={config.actionCosts.DeleteLink}
         />
         <Button onClick={this.undo}>Undo</Button>
