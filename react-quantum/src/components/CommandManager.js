@@ -31,6 +31,10 @@ class CommandManager extends React.Component {
     this.history.push(command);
     this.execute(command);
     this.currentTime++;
+    return this.props.state.actionPoints >= command.cost;
+      // if () {
+      //   this.resetState();
+      // }
   }
 
   execute(command) {
@@ -39,6 +43,7 @@ class CommandManager extends React.Component {
     newState.actionPoints -= command.cost;
     this.props.setState(newState);
     this.removeMatchingBoards();
+
   }
 
   removeMatchingBoards() {
@@ -63,9 +68,6 @@ class CommandManager extends React.Component {
   redo() {
     if (this.history.length > this.currentTime) {
       this.execute(this.history[this.currentTime]);
-      // let newState = this.history[this.currentTime].execute(this.props.state);
-      // newState.actionPoints -= this.history[this.currentTime].cost;
-      // this.props.setState(newState);
       this.currentTime++;
     } else {
       console.log("Attempting to Redo but there is no future.");

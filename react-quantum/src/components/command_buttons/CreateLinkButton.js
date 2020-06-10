@@ -71,8 +71,12 @@ class CreateLinkButton extends React.Component {
     }
 
     createCommand() {
-        this.props.appendToHistoryAndExecute(new CreateLinkCommand(this.props.cost, this.src, this.dst));
-        this.props.resetState();
+        const goOn = this.props.appendToHistoryAndExecute(new CreateLinkCommand(this.props.cost, this.src, this.dst));
+        if (goOn) {
+            this.changeStateRequestTile();
+        } else {
+            this.props.resetState();
+        }
     }
 
     render() {
