@@ -28,14 +28,14 @@ function Board(props) {
     const mapOfLinks = props.board.links;
     let renderedLinks = []
     
-    mapOfLinks.forEach((destList, src) =>
-      destList.forEach(
-        (dest) => (
+    mapOfLinks.forEach((dstList, src) =>
+      dstList.forEach(
+        (dst) => (
           renderedLinks.push(
             <Link
-              key={(src * props.board.size * props.board.size) + dest}
-              to={dest}
-              from={src}
+              key={(src * props.board.size * props.board.size) + dst}
+              dst={dst}
+              src={src}
               boardSize={props.board.size}
               onClickCallback={props.board.linksOnClickCallback}
               isButton={props.board.linksIsButton}
