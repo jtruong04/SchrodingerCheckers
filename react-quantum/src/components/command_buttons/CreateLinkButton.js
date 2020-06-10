@@ -48,7 +48,7 @@ class CreateLinkButton extends React.Component {
         const [row, col] = indexMapper1to2(this.src, size);
         let adjacentTiles = [];
         if( row > 0 ) {
-            adjacentTiles.push(indexMapper2to1(row-1, col, size));
+            adjacentTiles.push(indexMapper2to1(row - 1, col, size));
         }
         if (row < size - 1) {
             adjacentTiles.push(indexMapper2to1(row+1, col, size));
@@ -60,7 +60,9 @@ class CreateLinkButton extends React.Component {
             adjacentTiles.push(indexMapper2to1(row, col+1, size));
         }
         adjacentTiles.forEach((adjTileID) => {
-            newBoard.tiles[adjTileID].onClickCallback = this.receiveDestination;
+            if(!this.props.state.gameBoard.links.get(this.src).has(adjTileID)) {
+                newBoard.tiles[adjTileID].onClickCallback = this.receiveDestination;
+            }
         });
         this.props.setState({ gameBoard: newBoard });       
     }
