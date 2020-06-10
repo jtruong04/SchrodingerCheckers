@@ -59,8 +59,8 @@ class Game extends React.Component {
         </Row>
         <Row>
           <CommandManager 
-            setState={this.setState}
-            state={this.state}
+            setGameState={this.setState}
+            gameState={this.state}
           />
         </Row>
         <Row>

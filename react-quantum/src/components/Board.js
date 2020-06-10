@@ -6,26 +6,26 @@ import Link from './Link.js';
 import Row from 'react-bootstrap/Row';
 
 import './Board.css';
+
 // List of props available:
 // this.props.board : the game board
 
-// TODO: Render links
-class Board extends React.Component {
+function Board(props) {
 
-  renderBoard() {
+  const renderBoard = () => {
     return (
-      this.props.board.tiles.map((tile) => (
+      props.board.tiles.map((tile) => (
         <Tile
           key={tile.tileID}
           tile={tile}
-          size={this.props.board.size}
+          size={props.board.size}
         />
       ))
     )
-  }
+  };
 
-  renderLinks() {
-    const mapOfLinks = this.props.board.links;
+  const renderLinks = () => {
+    const mapOfLinks = props.board.links;
     let renderedLinks = []
     
     mapOfLinks.forEach((destList, src) =>
@@ -33,12 +33,12 @@ class Board extends React.Component {
         (dest) => (
           renderedLinks.push(
             <Link
-              key={(src * this.props.board.size * this.props.board.size) + dest}
+              key={(src * props.board.size * props.board.size) + dest}
               to={dest}
               from={src}
-              boardSize={this.props.board.size}
-              onClickCallback={this.props.board.linksOnClickCallback}
-              isButton={this.props.board.linksIsButton}
+              boardSize={props.board.size}
+              onClickCallback={props.board.linksOnClickCallback}
+              isButton={props.board.linksIsButton}
             />
           )
         )
@@ -46,16 +46,16 @@ class Board extends React.Component {
     );
 
     return renderedLinks;
-  }
+  };
 
-  render() {
-    return (
-      <Row className='gameBoard'>
-      {this.renderBoard()}
-      {this.renderLinks()}
-      </Row>
-    );
-  }
+  
+  return (
+    <Row className='gameBoard'>
+      {renderBoard()}
+      {renderLinks()}
+    </Row>
+  );
+  
 }
 
 export default Board;
