@@ -5,6 +5,7 @@
     position: relative;
     border: 2px solid black;
     overflow: hidden;
+    border-radius: 15%;
 }
 
 .whiteTile {
