@@ -58,8 +58,12 @@ class FlipTileButton extends React.Component {
   }
 
   createCommand(listOfTiles) {
-    this.props.appendToHistoryAndExecute(new FlipTilesCommand(this.props.cost, listOfTiles));
-    this.props.resetState();
+    const goOn = this.props.appendToHistoryAndExecute(new FlipTilesCommand(this.props.cost, listOfTiles));
+    if(goOn) {
+      this.changeStateRequestTile();
+    } else {
+      this.props.resetState();
+    }
   }
 
   render() {

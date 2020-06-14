@@ -8,116 +8,125 @@ import DeleteLinkButton from "./command_buttons/DeleteLinkButton.js";
 
 import config from '../config.json'
 import { remove } from 'lodash';
+
 // List of props available:
-// this.props.state    : entire game state
-// this.props.setState : callback function to change game state
+// this.props.gameState    : entire game state
+// this.props.setGameState : callback function to change game state
 
 class CommandManager extends React.Component {
   constructor(props) {
     super(props);
-    this.history = [];
-    this.globalHistory = [];
+    this.state = {
+      history: [],
+      globalHistory: [],
+      currentTime: 0
+    }
     this.addCommand = this.addCommand.bind(this);
-    this.resetState = this.resetState.bind(this);
+    this.resetGameState = this.resetGameState.bind(this);
     this.undo = this.undo.bind(this);
     this.redo = this.redo.bind(this);
     this.endTurn = this.endTurn.bind(this);
     this.execute = this.execute.bind(this);
-    this.currentTime = 0;
   }
 
   addCommand(command) {
-    this.history = this.history.slice(0,this.currentTime);
-    this.history.push(command);
+    let history = this.state.history;
+    history = history.slice(0,this.state.currentTime);
+    history.push(command);
     this.execute(command);
-    this.currentTime++;
+    this.setState({
+      history: history,
+      currentTime: this.state.currentTime+1
+    });
+
+    return this.props.gameState.actionPoints >= command.cost;
   }
 
   execute(command) {
-    // console.log(command.cost);
-    let newState = command.execute(this.props.state);
+    let newState = command.execute(this.props.gameState);
     newState.actionPoints -= command.cost;
-    this.props.setState(newState);
+    this.props.setGameState(newState);
     this.removeMatchingBoards();
   }
 
   removeMatchingBoards() {
-    let newState = this.props.state;
+    let newState = this.props.gameState;
     newState.players.forEach(player => {
-      remove(player.targetBoards, this.props.state.gameBoard.isEqual);
+      remove(player.targetBoards, this.props.gameState.gameBoard.isEqual);
     })
-    this.props.setState(newState);
+    this.props.setGameState(newState);
   }
 
   undo() {
-    if (this.currentTime > 0) {
-      this.currentTime--;
-      let newState = this.history[this.currentTime].undo(this.props.state);
-      newState.actionPoints += this.history[this.currentTime].cost;
-      this.props.setState(newState);
+    if (this.state.currentTime > 0) {
+      let newState = this.state.history[this.state.currentTime-1].undo(this.props.gameState);
+      newState.actionPoints += this.state.history[this.state.currentTime-1].cost;
+      this.setState({ currentTime: this.state.currentTime - 1 });
+      this.props.setGameState(newState);
     } else {
       console.log("Attempting to Undo but there is no past.");
     }
   }
 
   redo() {
-    if (this.history.length > this.currentTime) {
-      this.execute(this.history[this.currentTime]);
-      // let newState = this.history[this.currentTime].execute(this.props.state);
-      // newState.actionPoints -= this.history[this.currentTime].cost;
-      // this.props.setState(newState);
-      this.currentTime++;
+    if (this.state.history.length > this.state.currentTime) {
+      this.execute(this.state.history[this.state.currentTime]);
+      this.setState({ currentTime: this.state.currentTime + 1 });
     } else {
       console.log("Attempting to Redo but there is no future.");
     }
   }
 
   endTurn() {
+    this.resetGameState();
+    this.props.setGameState({
+      actionPoints: config.startingActionPoints,
+      currentPlayer: (this.props.gameState.currentPlayer + 1)%2
+    });
 
-    let turnState = this.props.state;
-    turnState.actionPoints = config.startingActionPoints;
-    turnState.currentPlayer = (turnState.currentPlayer + 1)%2;
-    this.props.setState(turnState);
-
-    this.globalHistory.push(this.history);
-    this.history = [];
-    this.currentTime = 0;
+    let globalHistory = this.state.globalHistory;
+    globalHistory.push(this.history);
+    this.setState({
+      globalHistory: globalHistory,
+      history: [],
+      currentTime: 0
+    })
   }
 
-  resetState() {
-    let newBoard = this.props.state.gameBoard;
+  resetGameState() {
+    let newBoard = this.props.gameState.gameBoard;
     newBoard.tiles.forEach((tile) => {
       tile.onClickCallback = null;
     });
     newBoard.linksOnClickCallback = null;
-    this.props.setState({ gameBoard: this.props.state.gameBoard });
+    this.props.setGameState({ gameBoard: this.props.gameState.gameBoard });
   }
 
   render() {
     return (
       <>
         <FlipTileButton
-          disabled={config.actionCosts.FlipTile > this.props.state.actionPoints}
-          setState={this.props.setState}
-          state={this.props.state}
+          disabled={config.actionCosts.FlipTile > this.props.gameState.actionPoints}
+          setState={this.props.setGameState}
+          state={this.props.gameState}
           appendToHistoryAndExecute={this.addCommand}
-          resetState={this.resetState}
+          resetState={this.resetGameState}
           cost={config.actionCosts.FlipTile}
         />
         <CreateLinkButton
-          disabled={config.actionCosts.CreateLink > this.props.state.actionPoints}
-          setState={this.props.setState}
-          state={this.props.state}
+          disabled={config.actionCosts.CreateLink > this.props.gameState.actionPoints}
+          setState={this.props.setGameState}
+          state={this.props.gameState}
           appendToHistoryAndExecute={this.addCommand}
-          resetState={this.resetState}
+          resetState={this.resetGameState}
           cost={config.actionCosts.CreateLink}
         />
         <DeleteLinkButton
-          disabled={config.actionCosts.DeleteLink > this.props.state.actionPoints}
-          setState={this.props.setState}
-          state={this.props.state}
+          disabled={config.actionCosts.DeleteLink > this.props.gameState.actionPoints}
+          setState={this.props.setGameState}
+          state={this.props.gameState}
           appendToHistoryAndExecute={this.addCommand}
-          resetState={this.resetState}
+          resetState={this.resetGameState}
           cost={config.actionCosts.DeleteLink}
         />
         <Button onClick={this.undo}>Undo</Button>
