@@ -65,11 +65,7 @@ class Game extends React.Component {
         }
       }
     });
-    hereNow = () =>{
-      setTimeout(()=>{
-        
-      },500)
-    }
+    
     //want the person who joins to publish to insure we have two players.
     // then double check for two players incase someone tried to join without a "good" code
 
