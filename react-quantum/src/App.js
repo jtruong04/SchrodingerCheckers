@@ -24,31 +24,59 @@ import Game from "./views/Game.js";
 import Profile from "./views/Profile.js";
 import Rankings from "./views/Rankings.js";
 import Navigation from "./Navigation.js"
+import PubNub from 'pubnub';
 
+class App extends React.Component {
+  constructor(props){
+    super(props)
+    
+    this.pubnub = new PubNub({
+      publishKey: "pub-c-075d6884-ce3e-4809-acdc-147545392971",
+      subscribeKey: "sub-c-0c2c540c-9707-11ea-8e71-f2b83ac9263d"
+    });
 
-function App() {
-  return (
-    <Router>
-      {/* NAVIGATION BAR */}
-      <Navigation />
-      {/* MAIN DISPLAY AREA */}
-      <Container className="mt-3">
-        <Switch>
-          <Route path="/game">
-            <Game />
-          </Route>
-          <Route path="/rankings">
-            <Rankings />
-          </Route>
-          <Route path="/profile">
-            <Profile />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
-      </Container>
-    </Router>
-  );
+    this.state = {
+      gameChannel: '',
+      isCreator: false,
+    }
+  }
+
+  // callback function for home to get the gameChannel
+  fromHomeGC = (gc) => {
+    this.setState({
+      gameChannel: gc
+    })
+  }
+  fromHomeCreator = (creator) => {
+    this.setState({
+      isCreator: creator,
+    })
+  }
+
+  render(){
+    return (
+      <Router>
+        {/* NAVIGATION BAR */}
+        <Navigation />
+        {/* MAIN DISPLAY AREA */}
+        <Container className="mt-3">
+          <Switch>
+            <Route path="/game">
+              <Game pubnub={this.pubnub} gameChannel={this.state.gameChannel} isCreator={this.state.isCreator}/>
+            </Route>
+            <Route path="/rankings">
+              <Rankings />
+            </Route>
+            <Route path="/profile">
+              <Profile />
+            </Route>
+            <Route path="/">
+              <Home pubnub={this.pubnub} callbackGameChannel={this.fromHomeGC.bind(this)} callbackIsCreator={this.fromHomeCreator.bind(this)}/>
+            </Route>
+          </Switch>
+        </Container>
+      </Router>
+    );
+  }
 }
 export default App;
