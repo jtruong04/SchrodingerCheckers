@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 from ..tables.user_table import Users
+import pprint
 
 # User endpoint
 
@@ -15,5 +16,4 @@ def get_users(**path_variables):
 def user_profile(id):
     error = None
     user_profile = Users.get(id)
-    print(user_profile.dict)
-    return jsonify(user_profile.first_name)
+    return jsonify({i: user_profile. for i in user_profile.__dict__})
