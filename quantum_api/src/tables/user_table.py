@@ -10,7 +10,7 @@ class Users(db.Model, base_table):
         db ([type]): [description]
         base_table ([type]): [description]
     """
-    
+
     __tablename__ = 'users'
     usr_name = db.Column(VARCHAR(100), primary_key=True)
     first_name = db.Column(VARCHAR(100))

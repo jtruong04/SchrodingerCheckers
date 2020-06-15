@@ -9,6 +9,9 @@ verify_ssl = true
 flask_sqlalchemy
 sqlalchemy
 flask
+flask_script
+flask_migrate
+pymysql
 
 [requires]
 python_version = "3.7"

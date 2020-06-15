@@ -5,6 +5,13 @@ import src
 db = src.db
 
 
+def dump_datetime(value):
+    """Deserialize datetime object into string form for JSON processing."""
+    if value is None:
+        return None
+    return [value.strftime("%Y-%m-%d"), value.strftime("%H:%M:%S")]
+
+
 class base_table():
 
     @classmethod
@@ -18,7 +25,8 @@ class base_table():
         """
         session = db.session
         query = session.query(cls)
-        return query.get(target)
+        result = query.get(target)
+        return result
 
     @classmethod
     def getAll(cls):
@@ -27,7 +35,7 @@ class base_table():
             All entries in table
         """
         session = db.session
-        query = session.query(cls)
+        query = session.query(cls).all()
         return query
 
     @classmethod
