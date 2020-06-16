@@ -12,6 +12,7 @@ flask
 flask_script
 flask_migrate
 pymysql
+passlib.hash
 
 [requires]
 python_version = "3.7"
