@@ -1,16 +1,14 @@
 import React from "react";
 
-// Bootstrap Components
-import {Container, Col, Row} from "react-bootstrap";
 import {Grid} from "@material-ui/core";
 // Pure Data
 import Board_Data from '../data_entities/Board_Data'
 import Player_Data from '../data_entities/Player_Data'
 
 // Components
-import Board from "../components/Board.js"
-import Player from "../components/Player.js";
-import CommandManager from '../components/CommandManager'
+import Board from "../gameComponents/Board.js"
+import Player from "../gameComponents/Player.js";
+import CommandManager from '../gameComponents/CommandManager'
 
 // CSS Styling
 import './Game.css'

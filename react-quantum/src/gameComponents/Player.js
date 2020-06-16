@@ -1,6 +1,5 @@
 import React from 'react';
 import Board from './Board.js';
-import {Col} from 'react-bootstrap';
 import {Grid} from '@material-ui/core';
 import './Player.css';
 // List of props available:

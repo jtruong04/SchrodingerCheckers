@@ -4,7 +4,6 @@ import Tile from './Tile.js';
 import Link from './Link.js';
 
 import { makeStyles } from '@material-ui/core/styles';
-import {Grid} from "@material-ui/core";
 import './Board.css';
 
 // List of props available:

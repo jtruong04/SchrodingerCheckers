@@ -21,17 +21,34 @@ import { BrowserRouter as Router,
         // Route 
       } from "react-router-dom";
 
-import { useMediaQuery, 
+import {
   CssBaseline, 
-  // Snackbar 
+  Snackbar 
 } from '@material-ui/core';
+import MuiAlert from '@material-ui/lab/Alert';
+
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import useStyles from './materialStyles';
 import TopBar from './uiComponents/TopBar';
 import LeftDrawer from './uiComponents/LeftDrawer';
 import ViewPort from './uiComponents/ViewPort';
 
-function App() {
+import { connect } from 'react-redux';
+import { hideAlert } from './actions/alertActions';
+// import PropTypes from 'prop-types';
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
+
+function App(props) {
+  //---------------------
+  //      Auth
+  //---------------------
+  // useEffect(() => (
+  //   store.dispatch(loadUser())
+  // ), []);
 
   //---------------------
   //      Theming
@@ -58,12 +75,12 @@ function App() {
   const handleDrawerClose = () => {
     setDrawerOpen(false);
   };
-  // const handleSnackClose = (event, reason) => {
-  //   if (reason === 'clickaway') {
-  //     return;
-  //   }
-  //   props.hideAlert();
-  // };
+  const handleSnackClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    props.hideAlert();
+  };
   return (
     <ThemeProvider theme={theme}>
       <Router>
@@ -72,14 +89,20 @@ function App() {
           <TopBar classes={classes} drawerOpen={drawerOpen} handleDrawerOpen={handleDrawerOpen} />
           <LeftDrawer classes={classes} drawerOpen={drawerOpen} handleDrawerClose={handleDrawerClose} darkMode={darkMode} setDarkMode={setDarkMode} />
           <ViewPort classes={classes} drawerOpen={drawerOpen} />
-          {/* <Snackbar open={props.snackProps.isVisible} anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={4000} onClose={handleSnackClose}>
+          <Snackbar open={props.snackProps.isVisible} anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={4000} onClose={handleSnackClose}>
             <Alert onClose={handleSnackClose} severity={props.snackProps.severity}>
               {props.snackProps.text}
             </Alert>
-          </Snackbar> */}
+          </Snackbar>
         </div>
       </Router>
     </ThemeProvider>
   );
 }
-export default App;
+
+const mapStateToProps = (state) => ({
+  snackProps: state.alert
+});
+
+
+export default connect(mapStateToProps, { hideAlert })(App);

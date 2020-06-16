@@ -32,7 +32,9 @@ def register():
 
         rank = None
         # TODO: I do not know what ilo score starts at
-        ilo = 400
+        # It's Elo and it's whatever we want to start at. Chess uses 1200 or so I think. Because people don't like negative numbers. I'm choosing 1000.
+        # Get educated: https://en.wikipedia.org/wiki/Elo_rating_system
+        ilo = 1000
 
         new_user = Users(usr_name=user_name, email=email, first_name=fname,
                          last_name=lname, location=loc, pwd=password,

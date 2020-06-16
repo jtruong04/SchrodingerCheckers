@@ -10,10 +10,10 @@ import {
 } from '@material-ui/core';
 import HowToRegIcon from '@material-ui/icons/HowToReg';
 
-// import { connect } from 'react-redux';
-// import { register } from '../actions/authActions';
+import { connect } from 'react-redux';
+import { register } from '../actions/authActions';
 
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
     modal: {
@@ -67,7 +67,7 @@ const Register = (props) => {
             if(props.values.password === props.values.password2) {
                 setPwdsMatch(true);
                 // POST
-                // props.register(props.values);
+                props.register(props.values);
             } else {
                 setPwdsMatch(false);
             }
@@ -163,13 +163,13 @@ const Register = (props) => {
     )
 }
 
-// Register.propTypes = {
-//     handleSwitch: PropTypes.func.isRequired,
-//     register: PropTypes.func.isRequired
-// }
+Register.propTypes = {
+    handleSwitch: PropTypes.func.isRequired,
+    register: PropTypes.func.isRequired
+}
 
-// const mapStateToProps = (state) => ({
+const mapStateToProps = (state) => ({
     
-// });
-export default Register;
-// export default connect(mapStateToProps, { register })(Register);
+});
+// export default Register;
+export default connect(mapStateToProps, { register })(Register);
