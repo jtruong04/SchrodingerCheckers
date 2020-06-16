@@ -8,7 +8,7 @@ class Config():
     TESTING = False
     sql_user = 'root'
     sql_pwd = urllib.parse.quote_plus("QuantumCAT2020?")
-    # SQLALCHEMY_DATABASE_URI = 'mysql://'+ sql_user + ':' + sql_pwd+ '@173.64.3.20:3306/QuantumCatDummy'
+    # SQLALCHEMY_DATABASE_URI = 'mysql://'+ sql_user + ':' + sql_pwd+ '@173.64.3.20:3306/QuantumCat'
 
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://'+ sql_user + ':' + "QuantumCAT2020?" + '@173.64.3.20:3306/QuantumCatDummy'
     
