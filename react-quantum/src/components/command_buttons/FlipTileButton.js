@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from 'react-bootstrap/Button'
+import Button from '@material-ui/core/Button'
 
 import FlipTilesCommand from '../../data_entities/commands/FlipTilesCommand'
 
@@ -67,7 +67,7 @@ class FlipTileButton extends React.Component {
   }
 
   render() {
-    return <Button 
+    return <Button variant="contained" color="primary"
         disabled={this.props.disabled}
         onClick={this.changeStateRequestTile}
     >Flip Tile ({this.props.cost})</Button>;

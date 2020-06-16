@@ -1,5 +1,5 @@
 import React from 'react'
-import Button from "react-bootstrap/Button";
+import Button from "@material-ui/core/Button";
 
 // Import commands
 import FlipTileButton from './command_buttons/FlipTileButton.js'
@@ -112,7 +112,7 @@ class CommandManager extends React.Component {
           appendToHistoryAndExecute={this.addCommand}
           resetState={this.resetGameState}
           cost={config.actionCosts.FlipTile}
-        />
+        />{' '}
         <CreateLinkButton
           disabled={config.actionCosts.CreateLink > this.props.gameState.actionPoints}
           setState={this.props.setGameState}
@@ -120,7 +120,7 @@ class CommandManager extends React.Component {
           appendToHistoryAndExecute={this.addCommand}
           resetState={this.resetGameState}
           cost={config.actionCosts.CreateLink}
-        />
+        />{' '}
         <DeleteLinkButton
           disabled={config.actionCosts.DeleteLink > this.props.gameState.actionPoints}
           setState={this.props.setGameState}
@@ -128,10 +128,10 @@ class CommandManager extends React.Component {
           appendToHistoryAndExecute={this.addCommand}
           resetState={this.resetGameState}
           cost={config.actionCosts.DeleteLink}
-        />
-        <Button onClick={this.undo}>Undo</Button>
-        <Button onClick={this.redo}>Redo</Button>
-        <Button onClick={this.endTurn}>End Turn</Button>
+        />{' '}
+        <Button variant="contained" color="default" onClick={this.undo} disabled={!(this.state.currentTime > 0)}>Undo</Button> {' '}
+        <Button variant="contained" color="default" onClick={this.redo} disabled={!(this.state.history.length > this.state.currentTime)}>Redo</Button>{' '}
+        <Button variant="contained" color="secondary" onClick={this.endTurn}>End Turn</Button>
       </>
     );
   }

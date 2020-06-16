@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from 'react-bootstrap/Button'
+import Button from '@material-ui/core/Button';
 
 import CreateLinkCommand from '../../data_entities/commands/CreateLinkCommand'
 import {indexMapper1to2, indexMapper2to1} from '../../helper/indexMapper'
@@ -82,7 +82,7 @@ class CreateLinkButton extends React.Component {
     }
 
     render() {
-        return <Button
+        return <Button variant="contained" color="primary"
                 disabled={this.props.disabled}
                 onClick={this.changeStateRequestTile}
             >Create Link ({this.props.cost})</Button>;

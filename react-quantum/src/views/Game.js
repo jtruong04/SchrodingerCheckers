@@ -2,7 +2,7 @@ import React from "react";
 
 // Bootstrap Components
 import {Container, Col, Row} from "react-bootstrap";
-
+import {Grid} from "@material-ui/core";
 // Pure Data
 import Board_Data from '../data_entities/Board_Data'
 import Player_Data from '../data_entities/Player_Data'
@@ -37,37 +37,64 @@ class Game extends React.Component {
 
   render() {
     return (
-      <Container>
-        <Row>
-          <Col></Col>
+      <>
+       <Grid container spacing={3} >
+          <Grid item xs={2} ></Grid>
           <Player player={this.state.players[1]} />
-          <Col></Col>
-        </Row>
-        <Row>
-          <Col></Col>
-          <Col xs={6}>
-              <Board 
-                board = {this.state.gameBoard}
-              />
-          </Col>
-          <Col></Col>
-        </Row>
-        <Row>
-          <Col></Col>
+          <Grid item xs={2} ></Grid>
+      </Grid>
+        <Grid container spacing={3} >
+          <Grid item xs ></Grid>
+          <Grid item xs={6} zeroMinWidth noWrap>
+            <Board board = {this.state.gameBoard} />
+          </Grid>
+          <Grid item xs></Grid>
+        </Grid>
+        <Grid container spacing={3} >
+          <Grid item xs={2} ></Grid>
           <Player player={this.state.players[0]} />
-          <Col></Col>
-        </Row>
-        <Row>
-          <CommandManager 
-            setGameState={this.setState}
-            gameState={this.state}
-          />
-        </Row>
-        <Row>
-          <p>Current Player: {this.state.currentPlayer}</p>,
-          <p>Action Points: {this.state.actionPoints}</p>
-        </Row>
-      </Container>
+          <Grid item xs={2} ></Grid>
+        </Grid>
+        <Grid container spacing={3} >
+          <Grid item xs={2} ></Grid>
+            <CommandManager 
+              setGameState={this.setState}
+              gameState={this.state}
+            />
+          <Grid item xs={2} ></Grid>
+        </Grid>
+
+      </>
+      // <Container>
+      //   <Row>
+      //     <Col></Col>
+      //     <Col></Col>
+      //   </Row>
+      //   <Row>
+      //     <Col></Col>
+      //     <Col xs={6}>
+      //         <Board 
+      //           board = {this.state.gameBoard}
+      //         />
+      //     </Col>
+      //     <Col></Col>
+      //   </Row>
+      //   <Row>
+      //     <Col></Col>
+      //     <Player player={this.state.players[0]} />
+      //     <Col></Col>
+      //   </Row>
+      //   <Row>
+      //     <CommandManager 
+      //       setGameState={this.setState}
+      //       gameState={this.state}
+      //     />
+      //   </Row>
+      //   <Row>
+      //     <p>Current Player: {this.state.currentPlayer}</p>,
+      //     <p>Action Points: {this.state.actionPoints}</p>
+      //   </Row>
+      // </Container>
     );
   }
 }

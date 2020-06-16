@@ -3,14 +3,25 @@ import React from 'react';
 import Tile from './Tile.js';
 import Link from './Link.js';
 
-import Row from 'react-bootstrap/Row';
-
+import { makeStyles } from '@material-ui/core/styles';
+import {Grid} from "@material-ui/core";
 import './Board.css';
 
 // List of props available:
 // this.props.board : the game board
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    // maxWidth: '540px',
+    // margin: '5px auto',
+    // border: '2px solid black'
+  }
+
+}));
 function Board(props) {
+  const classes = useStyles();
 
   const renderBoard = () => {
     return (
@@ -27,7 +38,7 @@ function Board(props) {
   const renderLinks = () => {
     const mapOfLinks = props.board.links;
     let renderedLinks = []
-    
+    // console.log("Map:", mapOfLinks);
     mapOfLinks.forEach((dstList, src) =>
       dstList.forEach(
         (dst) => (
@@ -50,10 +61,10 @@ function Board(props) {
 
   
   return (
-    <Row className='gameBoard'>
+    <div className={classes.root}>
       {renderBoard()}
       {renderLinks()}
-    </Row>
+    </div>
   );
   
 }

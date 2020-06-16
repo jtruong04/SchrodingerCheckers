@@ -10,6 +10,9 @@ import {
 
 import './Link.css'
 import {indexMapper1to2} from '../helper/indexMapper'
+import globalStyles from '../materialStyles';
+import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
 
 // List of props available:
 // props.src             : originating tile
@@ -17,8 +20,25 @@ import {indexMapper1to2} from '../helper/indexMapper'
 // props.boardSize       : board size
 // props.onClickCallback : callback function
 // props.isButton        : boolean
-
+const useStyles = makeStyles((theme) => ({
+  link: {
+      zIndex        : 5,
+      position      : 'absolute',
+      textAlign     : 'center',
+      fontSize      : 'calc(2vw + 2vh)',
+      transform     : 'translate(-50%, -50%)',
+      color         : 'red',
+      background    : '#0000',
+      border        : 0,
+      display       : 'flex',
+      justifyContent: 'center',
+      alignItems    : 'center'
+    }
+}));
 function Link(props) {
+
+  const classes = useStyles();
+  const globalClasses = globalStyles();
 
   const calculateArrowDirection = (fromRow, fromCol, toRow, toCol) => {
     const assert = require("assert");
@@ -55,7 +75,8 @@ function Link(props) {
   };
 
   const handleClick = (e) => {
-    return props.onClickCallback(props.from, props.to);
+    console.log("Props:", props, props.src, props.dst);
+    return props.onClickCallback(props.src, props.dst);
   };
 
   const [fromRow, fromCol] = indexMapper1to2(props.src, props.boardSize);
@@ -65,9 +86,11 @@ function Link(props) {
   
   return (
     <div
-      className={
-        "link " + (props.onClickCallback ? "selectableComponent " : " ")
-      }
+      className={clsx(
+        classes.link,
+        props.onClickCallback ? globalClasses.selectableComponent : null
+      )}
+      // className = 'link'
       style={{
         top: top,
         left: left,

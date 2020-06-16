@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from 'react-bootstrap/Button'
+import Button from '@material-ui/core/Button'
 
 import DeleteLinkCommand from '../../data_entities/commands/DeleteLinkCommand'
 // import {indexMapper1to2, indexMapper2to1} from '../../helper/indexMapper'
@@ -47,7 +47,7 @@ class DeleteLinkButton extends React.Component {
     }
 
     render() {
-        return <Button 
+        return <Button variant="contained" color="primary"
             disabled={this.props.disabled}
             onClick={this.changeStateRequestLink}
         >Delete Link ({this.props.cost})</Button>;
