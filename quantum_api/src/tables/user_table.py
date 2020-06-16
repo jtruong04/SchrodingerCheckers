@@ -1,5 +1,5 @@
 # users table
-from sqlalchemy import VARCHAR, INT
+from sqlalchemy import VARCHAR, INT, FLOAT
 from .base_table import base_table, db
 
 
@@ -19,3 +19,4 @@ class Users(db.Model, base_table):
     location = db.Column(VARCHAR(100))
     pwd = db.Column(VARCHAR(100))
     rank = db.Column(INT)
+    ilo = db.Column(FLOAT)

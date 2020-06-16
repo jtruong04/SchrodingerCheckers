@@ -1,6 +1,6 @@
 # base table
 import src
-# from flask import current_app
+from sqlalchemy import func
 
 db = src.db
 
@@ -15,7 +15,7 @@ def dump_datetime(value):
 class base_table():
 
     @classmethod
-    def get(cls, target):
+    def get(cls):
         """ Method which returns the instance where primary key == target
 
         Args:
@@ -25,8 +25,7 @@ class base_table():
         """
         session = db.session
         query = session.query(cls)
-        result = query.get(target)
-        return result
+        return query
 
     @classmethod
     def getAll(cls):
@@ -52,4 +51,6 @@ class base_table():
 
     @classmethod
     def count(cls):
-        pass
+        session = db.session
+        query = session.query(func.count('*'))
+        return query
