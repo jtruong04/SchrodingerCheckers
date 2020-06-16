@@ -38,8 +38,10 @@ class base_table():
         return query
 
     @classmethod
-    def post(cls):
-        pass
+    def post(cls, to_post):
+        session = db.session
+        session.add(to_post)
+        return session.commit()
 
     @classmethod
     def patch(cls):
