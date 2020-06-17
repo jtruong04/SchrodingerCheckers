@@ -13,7 +13,7 @@ flask_script
 flask_migrate
 pymysql
 passlib.hash
-jwt
+pyjwt
 datetime
 
 [requires]

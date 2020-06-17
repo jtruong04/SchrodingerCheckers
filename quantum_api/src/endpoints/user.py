@@ -37,7 +37,7 @@ def register():
 
         rank = None
         # TODO: I do not know what ilo score starts at
-        ilo = 400
+        ilo = 1000
 
         # check if required fields are populated
         if (user_name is None) or (email is None) or (password is None):
@@ -77,11 +77,12 @@ def login():
         pwd_db = Users.get(user_name).pwd
         if verify_password(password, pwd_db):
             user = Users.query.filter_by(usr_name=user_name).first()
-            auth_token = user.encode_auth_token(user_id=5)
+            auth_token = user.encode_auth_token(user_id=user_name)
             print(auth_token)
             obj = {'msg': 'Logged in',
-                   'token': auth_token,
-                   'user': {'username': user_name, 'email': Users.get(user_name).email}}
+                   'token': str(auth_token),
+                   'user' : {'username': user_name, 'email': Users.get(user_name).email}
+                   }
             return jsonify(obj), 200
         else:
             return jsonify({'msg': msg}), 400

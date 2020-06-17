@@ -1,5 +1,5 @@
 # users table
-import jwt
+import jwt as jwt
 import datetime
 from sqlalchemy import VARCHAR, INT, FLOAT
 from .base_table import base_table, db
