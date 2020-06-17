@@ -2,6 +2,6 @@
     "python.linting.pylintEnabled": true,
     "python.linting.flake8Enabled": true,
     "python.linting.enabled": true,
-    "python.pythonPath": "/Users/mjpmorse/.pyenv/versions/3.7.3/envs/SchCat",
+    "python.pythonPath": "/usr/local/bin/python3",
     "python.linting.pylintArgs": ["--load-plugins", "pylint-flask"]
 }

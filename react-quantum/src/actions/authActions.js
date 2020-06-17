@@ -17,8 +17,7 @@ import axios from 'axios';
 export const loadUser = () => (dispatch, getState) => {
     // User loading
     dispatch({ type: USER_LOADING });
-
-    axios.get('/api/users', tokenConfig(getState))
+    axios.get('/user/load', tokenConfig(getState))
         .then(res => {
             dispatch({
                 type: USER_LOADED,
@@ -43,12 +42,9 @@ export const register = ({ username, email, password }) => (dispatch) => {
     body.append('username', username);
     body.append('password', password);
     body.append('email', email);
-    body.append('fname', 'John');
-    body.append('lname', 'Smith');
-    body.append('location', 'Earth');
     // console.log(body);
 
-    axios.post('/register', body, config)
+    axios.post('/user/register', body, config)
         .then(res => {
             dispatch({
                 type: EMIT_ALERT,
@@ -80,58 +76,59 @@ export const register = ({ username, email, password }) => (dispatch) => {
         })
 }
 
-// export const login = ({ email, password, remember }) => (dispatch) => {
-//     const config = {
-//         headers: {
-//             "Content-Type": "application/json",
-//         }
-//     }
-//     const body = JSON.stringify({ email, password });
-//     axios.post('/api/auth', body, config)
-//         .then(res => {
-//             dispatch({
-//                 type: EMIT_ALERT,
-//                 payload: {
-//                     text: 'Logged in',
-//                     severity: 'success'
-//                 }
-//             });
-//             dispatch({
-//                 type: LOGIN_SUCCESS,
-//                 payload: {
-//                     ...res.data,
-//                     remember: remember
-//                 }
-//             });
-//         })
-//         .catch(err => {
-//             console.log(err.response);
-//             dispatch(returnErrors(err.response.data, err.response.status, 'LOGIN_FAIL'));
-//             dispatch({
-//                 type: EMIT_ALERT,
-//                 payload: {
-//                     text: 'Login failed: ' + err.response.data.msg,
-//                     severity: 'error'
-//                 }
-//             });
-//             dispatch({
-//                 type: LOGIN_FAIL
-//             })
-//         })
-// }
+export const login = ({ username, password, remember }) => (dispatch) => {
+    const config = {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        }
+    }
+    const body = new FormData();
+    body.append('username', username);
+    body.append('password', password);
+    axios.post('/user/login', body, config)
+        .then(res => {
+            dispatch({
+                type: EMIT_ALERT,
+                payload: {
+                    text: 'Logged in',
+                    severity: 'success'
+                }
+            });
+            dispatch({
+                type: LOGIN_SUCCESS,
+                payload: {
+                    ...res.data,
+                    remember: remember
+                }
+            });
+        })
+        .catch(err => {
+            dispatch(returnErrors(err.response.data, err.response.status, 'LOGIN_FAIL'));
+            dispatch({
+                type: EMIT_ALERT,
+                payload: {
+                    text: 'Login failed: ' + err.response.data.msg,
+                    severity: 'error'
+                }
+            });
+            dispatch({
+                type: LOGIN_FAIL
+            })
+        })
+}
 
-// export const logout = () => dispatch => {
-//     dispatch({
-//         type: EMIT_ALERT,
-//         payload: {
-//             text: 'Logged out',
-//             severity: 'success'
-//         }
-//     });
-//     dispatch({
-//         type: LOGOUT_SUCCESS
-//     });
-// };
+export const logout = () => dispatch => {
+    dispatch({
+        type: EMIT_ALERT,
+        payload: {
+            text: 'Logged out',
+            severity: 'success'
+        }
+    });
+    dispatch({
+        type: LOGOUT_SUCCESS
+    });
+};
 
 export const tokenConfig = getState => {
     // Get token from localStorage

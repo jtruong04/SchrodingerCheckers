@@ -75,7 +75,6 @@ function Link(props) {
   };
 
   const handleClick = (e) => {
-    console.log("Props:", props, props.src, props.dst);
     return props.onClickCallback(props.src, props.dst);
   };
 

@@ -13,7 +13,6 @@ class DeleteLinkCommand extends Command {
 
     execute(state) {
         let newState = state;
-        console.log(newState.gameBoard.links, this.src, this.dst);
         newState.gameBoard.links.get(this.src).delete(this.dst);
         return newState;
     }

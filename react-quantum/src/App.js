@@ -13,7 +13,7 @@ There should be no need to change App.js unless we add another view or want to c
 
 */
 
-import React,{useState} from 'react';
+import React,{useState, useEffect} from 'react';
 // import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter as Router, 
@@ -35,7 +35,10 @@ import ViewPort from './uiComponents/ViewPort';
 
 import { connect } from 'react-redux';
 import { hideAlert } from './actions/alertActions';
+import { loadUser } from './actions/authActions';
+
 // import PropTypes from 'prop-types';
+import store from './store';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -46,9 +49,9 @@ function App(props) {
   //---------------------
   //      Auth
   //---------------------
-  // useEffect(() => (
-  //   store.dispatch(loadUser())
-  // ), []);
+  useEffect(() => (
+    store.dispatch(loadUser())
+  ), []);
 
   //---------------------
   //      Theming
@@ -105,4 +108,4 @@ const mapStateToProps = (state) => ({
 });
 
 
-export default connect(mapStateToProps, { hideAlert })(App);
+export default connect(mapStateToProps, { hideAlert, loadUser })(App);

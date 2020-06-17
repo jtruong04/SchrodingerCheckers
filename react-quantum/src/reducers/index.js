@@ -2,13 +2,13 @@ import { combineReducers } from 'redux';
 
 // // import boardReducer from './boardReducer';
 import errorReducer from './errorReducer';
-// import authReducer from './authReducer';
+import authReducer from './authReducer';
 import alertReducer from './alertReducer';
 
 
 export default combineReducers({
-    // auth: authReducer,
+    auth: authReducer,
     error: errorReducer,
-    alert: alertReducer,
+    alert: alertReducer
     // board: boardReducer,
 })

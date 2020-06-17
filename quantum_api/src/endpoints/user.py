@@ -12,6 +12,14 @@ user = Blueprint('user', __name__)
 def get_users(**path_variables):
     return jsonify({'users': 'Jim'}), 200
 
+@user.route('/load', methods=["GET"])
+def load_user():
+    msg, sub = Users.decode_auth_token(request.headers['X-Auth-Token'])
+    if(sub):
+        return jsonify({'msg': msg, 'username': sub}), 200
+    else:
+        return jsonify({'msg': msg, 'username': sub}), 400
+
 
 @user.route('/<string:id>', methods=['GET'])
 def user_profile(id):
@@ -36,7 +44,6 @@ def register():
         lname = request.form.get('lname')
 
         rank = None
-        # TODO: I do not know what ilo score starts at
         ilo = 1000
 
         # check if required fields are populated
@@ -78,9 +85,9 @@ def login():
         if verify_password(password, pwd_db):
             user = Users.query.filter_by(usr_name=user_name).first()
             auth_token = user.encode_auth_token(user_id=user_name)
-            print(auth_token)
+            # print(auth_token)
             obj = {'msg': 'Logged in',
-                   'token': str(auth_token),
+                   'token': auth_token.decode('utf-8'),
                    'user': {'username': user_name, 'email': Users.get(user_name).email}
                    }
             return jsonify(obj), 200

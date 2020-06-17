@@ -14,9 +14,9 @@ import {
     // Link
 } from '@material-ui/core';
 import LockIcon from '@material-ui/icons/Lock';
-// import { connect } from 'react-redux';
-// import { login } from '../actions/authActions';
-// import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { login } from '../actions/authActions';
+import PropTypes from 'prop-types';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -53,7 +53,7 @@ function Login(props) {
     const classes = useStyles();
 
     // const [values, setValues] = React.useState({
-    //     email: '',
+    //     username: '',
     //     password: ''
     // });
     // const handleChange = name => event => {
@@ -64,13 +64,12 @@ function Login(props) {
         setRemember(!remember);
     };
 
-
     const handleSubmit = (e) => {
         e.preventDefault();
-        // props.login({
-        //     ...props.values,
-        //     remember
-        // });
+        props.login({
+            ...props.values,
+            remember
+        });
     }
 
     return (
@@ -80,19 +79,19 @@ function Login(props) {
             </Avatar>
             <Typography component="h1" variant="h5">
                 Log In
-        </Typography>
+            </Typography>
             <form className={classes.form} onSubmit={handleSubmit}>
                 <TextField
                     variant="outlined"
                     margin="normal"
                     required
                     fullWidth
-                    id="email"
-                    label="Email Address or Username"
-                    name="email"
-                    onChange={props.handleChange('email')}
-                    autoComplete="email"
-                    value={props.values.email}
+                    id="username"
+                    label="Username"
+                    name="username"
+                    onChange={props.handleChange('username')}
+                    autoComplete="username"
+                    value={props.values.username}
                 />
                 <TextField
                     variant="outlined"
@@ -138,13 +137,13 @@ function Login(props) {
     )
 }
 
-// Login.propTypes = {
-//     handleSwitch: PropTypes.func.isRequired,
-//     login: PropTypes.func.isRequired
-// }
+Login.propTypes = {
+    handleSwitch: PropTypes.func.isRequired,
+    login: PropTypes.func.isRequired
+}
 
-// const mapStateToProps = (state) => ({
+const mapStateToProps = (state) => ({
 
-// });
-export default Login;
-// export default connect(mapStateToProps, { login })(Login);
+});
+// export default Login;
+export default connect(mapStateToProps, { login })(Login);

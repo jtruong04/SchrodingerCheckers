@@ -31,7 +31,7 @@ class Users(db.Model, base_table):
         """
         try:
             payload = {
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=5),
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=3600),
                 'iat': datetime.datetime.utcnow(),
                 'sub': user_id
             }
@@ -49,12 +49,12 @@ class Users(db.Model, base_table):
         """
         Decodes the auth token
         :param auth_token:
-        :return: integer|string
+        :return: msg(string), sub(string)
         """
         try:
-            payload = jwt.decode(auth_token, app.config.get('SECRET_KEY'))
-            return payload['sub']
+            payload = jwt.decode(auth_token, flaskApp.config.get('SECRET_KEY'))
+            return '', payload['sub']
         except jwt.ExpiredSignatureError:
-            return 'Signature expired. Please log in again.'
+            return 'Signature expired. Please log in again.', None
         except jwt.InvalidTokenError:
-            return 'Invalid token. Please log in again.'
+            return 'Invalid token. Please log in again.', None
