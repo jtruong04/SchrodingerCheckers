@@ -15,7 +15,7 @@ def dump_datetime(value):
 class base_table():
 
     @classmethod
-    def get(cls):
+    def get(cls, target):
         """ Method which returns the instance where primary key == target
 
         Args:
@@ -25,7 +25,8 @@ class base_table():
         """
         session = db.session
         query = session.query(cls)
-        return query
+        result = query.get(target)
+        return result
 
     @classmethod
     def getAll(cls):
