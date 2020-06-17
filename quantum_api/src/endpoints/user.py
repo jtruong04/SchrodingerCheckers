@@ -81,7 +81,7 @@ def login():
             print(auth_token)
             obj = {'msg': 'Logged in',
                    'token': str(auth_token),
-                   'user' : {'username': user_name, 'email': Users.get(user_name).email}
+                   'user': {'username': user_name, 'email': Users.get(user_name).email}
                    }
             return jsonify(obj), 200
         else:
