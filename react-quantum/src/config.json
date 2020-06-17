@@ -1,5 +1,5 @@
 {
-    "boardSize"           : 4,
+    "boardSize"           : 5,
     "startingActionPoints": 3,
     "numberTargetCards"   : 3,
     "actionCosts"         : {

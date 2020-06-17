@@ -1,6 +1,9 @@
 # users table
+import jwt as jwt
+import datetime
 from sqlalchemy import VARCHAR, INT, FLOAT
 from .base_table import base_table, db
+from src import flaskApp as flaskApp
 
 
 class Users(db.Model, base_table):
@@ -20,3 +23,38 @@ class Users(db.Model, base_table):
     pwd = db.Column(VARCHAR(100))
     rank = db.Column(INT)
     ilo = db.Column(FLOAT)
+
+    def encode_auth_token(self, user_id):
+        """
+        Generates the Auth Token
+        :return: string
+        """
+        try:
+            payload = {
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=3600),
+                'iat': datetime.datetime.utcnow(),
+                'sub': user_id
+            }
+            return jwt.encode(
+                payload,
+                flaskApp.config.get('SECRET_KEY'),
+                algorithm='HS256'
+            )
+        except Exception as e:
+            return e
+
+
+    @staticmethod
+    def decode_auth_token(auth_token):
+        """
+        Decodes the auth token
+        :param auth_token:
+        :return: msg(string), sub(string)
+        """
+        try:
+            payload = jwt.decode(auth_token, flaskApp.config.get('SECRET_KEY'))
+            return '', payload['sub']
+        except jwt.ExpiredSignatureError:
+            return 'Signature expired. Please log in again.', None
+        except jwt.InvalidTokenError:
+            return 'Invalid token. Please log in again.', None
