@@ -35,10 +35,6 @@ class Users(db.Model, base_table):
                 'iat': datetime.datetime.utcnow(),
                 'sub': user_id
             }
-            print('***************')
-            print(payload)
-            print(flaskApp.config.get('SECRET_KEY'))
-            print('***************')
             return jwt.encode(
                 payload,
                 flaskApp.config.get('SECRET_KEY'),

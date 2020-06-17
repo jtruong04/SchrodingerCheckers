@@ -12,9 +12,9 @@ class Config():
     SQLALCHEMY_DATABASE_URI = ('mysql+pymysql://' + sql_user + ':'
                                + "QuantumCAT2020?"
                                + '@173.64.3.20:3306/QuantumCat')
-    #SECRET_KEY = ('8n\xbd\n\x91\xa8\x83\x95\xd2\xd8\xd7'
-    #              + '\xe2\xe8"\xef(\xde\x81\x8e9\xc1h\xcc\xd4')
-    SECRET_KEY = os.getenv('SECRET_KEY', 'my_precious')
+    SECRET_KEY = ('8n\xbd\n\x91\xa8\x83\x95\xd2\xd8\xd7'
+                  + '\xe2\xe8"\xef(\xde\x81\x8e9\xc1h\xcc\xd4')
+    #SECRET_KEY = os.getenv('SECRET_KEY', 'my_precious')
 
 class devConfig(Config):
     DEBUG = True
