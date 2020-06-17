@@ -28,6 +28,7 @@ import {
 import MuiAlert from '@material-ui/lab/Alert';
 
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import useStyles from './materialStyles';
 import TopBar from './uiComponents/TopBar';
 import LeftDrawer from './uiComponents/LeftDrawer';
@@ -56,8 +57,8 @@ function App(props) {
   //---------------------
   //      Theming
   //---------------------
-  const [darkMode, setDarkMode] = useState(true);
-  // const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  const [darkMode, setDarkMode] = useState(!useMediaQuery('(prefers-color-scheme: dark)'));
+  // const prefersDarkMode = ;
   const theme = React.useMemo(
     () =>
       createMuiTheme({
