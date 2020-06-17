@@ -14,11 +14,14 @@ def get_users(**path_variables):
 
 @user.route('/load', methods=["GET"])
 def load_user():
-    msg, sub = Users.decode_auth_token(request.headers['X-Auth-Token'])
-    if(sub):
-        return jsonify({'msg': msg, 'username': sub}), 200
-    else:
-        return jsonify({'msg': msg, 'username': sub}), 400
+    try:
+        msg, sub = Users.decode_auth_token(request.headers['X-Auth-Token'])
+        if(sub):
+            return jsonify({'msg': msg, 'username': sub}), 200
+        else:
+            return jsonify({'msg': msg, 'username': sub}), 400
+    except KeyError:
+        return jsonify({'msg': 'No token', 'username': None}), 400
 
 
 @user.route('/<string:id>', methods=['GET'])
