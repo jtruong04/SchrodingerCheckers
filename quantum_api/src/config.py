@@ -11,7 +11,7 @@ class Config():
 
     SQLALCHEMY_DATABASE_URI = ('mysql+pymysql://' + sql_user + ':'
                                + "QuantumCAT2020?"
-                               + '@173.64.3.20:3306/QuantumCat')
+                               + '@68.133.37.158/QuantumCat')
     SECRET_KEY = ('MICHAEL_SUCKS_AT_CODING_MAYBE')
     #SECRET_KEY = os.getenv('SECRET_KEY', 'my_precious')
 

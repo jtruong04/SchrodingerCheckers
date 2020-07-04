@@ -49,8 +49,12 @@ class base_table():
         pass
 
     @classmethod
-    def delete(cls):
-        pass
+    def delete(cls, target):
+        session = db.session
+        query = session.query(cls)
+        result = query.get(target)
+        session.delete(result)
+        return session.commit()
 
     @classmethod
     def count(cls):
