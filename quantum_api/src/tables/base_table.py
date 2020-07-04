@@ -42,7 +42,8 @@ class base_table():
     def post(cls, to_post):
         session = db.session
         session.add(to_post)
-        return session.commit()
+        session.commit()
+        return to_post
 
     @classmethod
     def patch(cls):
