@@ -30,10 +30,12 @@ def verify_password(usr_given, from_db):
 # Initialize all of the blueprints
 from .user import user as user
 from .home import home as home
+from .api_endpoint import api as api
 
 def api_init(app):
     app.register_blueprint(user,
                            url_prefix='/user')
-
     app.register_blueprint(home,
                            url_prefix='/')
+    app.register_blueprint(api,
+                           url_prefix='/api')

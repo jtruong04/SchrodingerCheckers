@@ -1,6 +1,8 @@
 # base table
 import src
 from sqlalchemy import func
+from sqlalchemy import update
+
 
 db = src.db
 
@@ -42,15 +44,26 @@ class base_table():
     def post(cls, to_post):
         session = db.session
         session.add(to_post)
+        session.commit()
+        return to_post
+
+    @classmethod
+    def patch(cls, primary, new_values):
+        session = db.session
+        query = session.query(cls)
+        result = query.get(primary)
+        for key in new_values:
+            setattr(result, key, new_values[key])
+        session.commit()
+        return result
+
+    @classmethod
+    def delete(cls, target):
+        session = db.session
+        query = session.query(cls)
+        result = query.get(target)
+        session.delete(result)
         return session.commit()
-
-    @classmethod
-    def patch(cls):
-        pass
-
-    @classmethod
-    def delete(cls):
-        pass
 
     @classmethod
     def count(cls):
