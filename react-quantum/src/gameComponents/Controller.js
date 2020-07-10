@@ -1,16 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import { isValidLink } from '../helper/inputValidation';
 import {
-    GET_STATE,
+    // GET_STATE,
     FLIP_TILE,
     CREATE_LINK,
     DELETE_LINK,
     UNDO,
     REDO,
-    CLEAR_HISTORY,
+    // CLEAR_HISTORY,
     END_TURN,
 } from '../actions/types';
 import gameActions from '../actions/gameActions';
@@ -22,7 +22,7 @@ function Controller(props) {
         setInputs,
         inputMode,
         actionPoints,
-        setState,
+        // setState,
     } = props;
 
     const ActionHandler = {
@@ -126,7 +126,7 @@ function Controller(props) {
                 setInputMode(null);
             }
         }
-    }, [setInputMode, inputMode, actionPoints, config.actionCosts]);
+    }, [setInputMode, inputMode, actionPoints]);
 
     React.useEffect(() => {
         const { mode, inputs } = inputMode;
@@ -161,7 +161,7 @@ function Controller(props) {
     return renderButtons();
 }
 
-Controller.propTypes = {};
+// Controller.propTypes = {};
 
 const mapStateToProps = (state) => ({
     actionPoints: state.game.state.present.actionPoints,

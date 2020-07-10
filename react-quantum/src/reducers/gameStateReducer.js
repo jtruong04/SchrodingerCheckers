@@ -3,16 +3,13 @@ import {
     FLIP_TILE,
     CREATE_LINK,
     DELETE_LINK,
-    UNDO,
-    REDO,
-    CLEAR_HISTORY,
     END_TURN,
 } from '../actions/types';
 import { produce, current } from 'immer';
 import { pull, union } from 'lodash';
 import config from '../config.json';
 import traverseGraph from '../helper/traverseGraph';
-import checkVictory from '../helper/checkVictory';
+// import checkVictory from '../helper/checkVictory';
 import compareArrays from '../helper/compareArrays';
 import { generateAllCards } from '../helper/generateRandomCard';
 
@@ -67,9 +64,13 @@ export default produce((draft, action) => {
             break;
         case DELETE_LINK:
             pull(draft.board.links[parseInt(payload.src)], payload.dst);
+            break;
         case END_TURN:
             draft.currentPlayer = (draft.currentPlayer + 1) % config.maxPlayers;
             draft.actionPoints = config.startingActionPoints;
+            break;
+        default:
+            break;
     }
     draft.actionPoints -= cost;
 });

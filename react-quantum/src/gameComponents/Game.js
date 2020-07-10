@@ -6,7 +6,7 @@ import Board from './Board';
 import Controller from './Controller';
 // Config
 import config from '../config.json';
-import { generateAllCards } from '../helper/generateRandomCard';
+// import { generateAllCards } from '../helper/generateRandomCard';
 import CardCarousel from './CardCarousel';
 
 class Game extends React.Component {
@@ -105,7 +105,7 @@ class Game extends React.Component {
                             setInputMode={this.setInputMode}
                             setInputs={this.setInputs}
                             inputMode={this.state.inputMode}
-                            setState={this.setState}
+                            // setState={this.setState}
                         />
                     </Grid>
                 </Grid>
