@@ -34,7 +34,7 @@ export default {
                     dispatch({
                         type: FLIP_TILE,
                         payload: depth,
-                        cost: cost,
+                        cost: idx === 0 ? cost : 0,
                     }),
                 idx * 100
             );
