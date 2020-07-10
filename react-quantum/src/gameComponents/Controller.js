@@ -36,6 +36,7 @@ function Controller(props) {
             },
             buttonConfig: {
                 variant: 'outlined',
+                disabled: !props.canUndo,
             },
         },
         [REDO]: {
@@ -48,6 +49,7 @@ function Controller(props) {
             },
             buttonConfig: {
                 variant: 'outlined',
+                disabled: !props.canRedo,
             },
         },
         [FLIP_TILE]: {
@@ -62,6 +64,7 @@ function Controller(props) {
                 variant: 'contained',
                 color:
                     props.inputMode.mode === FLIP_TILE ? 'primary' : 'default',
+                disabled: config.actionCosts[FLIP_TILE] > props.actionPoints,
             },
         },
         [CREATE_LINK]: {
@@ -78,6 +81,7 @@ function Controller(props) {
                     props.inputMode.mode === CREATE_LINK
                         ? 'primary'
                         : 'default',
+                disabled: config.actionCosts[CREATE_LINK] > props.actionPoints,
             },
         },
         [DELETE_LINK]: {
@@ -94,6 +98,7 @@ function Controller(props) {
                     props.inputMode.mode === DELETE_LINK
                         ? 'primary'
                         : 'default',
+                disabled: config.actionCosts[DELETE_LINK] > props.actionPoints,
             },
         },
         [END_TURN]: {
@@ -157,6 +162,8 @@ Controller.propTypes = {};
 
 const mapStateToProps = (state) => ({
     actionPoints: state.game.state.present.actionPoints,
+    canUndo: state.game.state.index > 0,
+    canRedo: state.game.state.index < state.game.state.limit - 1,
 });
 const mapDispatchToProps = {
     undo: gameActions[UNDO],

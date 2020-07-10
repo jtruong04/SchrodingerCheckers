@@ -8,7 +8,7 @@ import {
     faLongArrowAltRight,
 } from '@fortawesome/free-solid-svg-icons';
 
-import './Link.css';
+// import './Link.css';
 import { indexMapper1to2 } from '../helper/indexMapper';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
