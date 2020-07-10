@@ -21,7 +21,7 @@ const initialState = {
         tiles: new Array(config.boardSize ** 2).fill(false),
         links: new Array(config.boardSize ** 2).fill([]),
     },
-    playersCards: generateAllCards(
+    playerCards: generateAllCards(
         2,
         config.numberTargetCards,
         config.boardSize
@@ -35,7 +35,8 @@ const initialState = {
 
 export default produce((draft, action) => {
     if (!draft) {
-        return initialState;
+        draft = initialState;
+        return draft;
     }
     const { type, payload, cost = 0 } = action;
     switch (type) {
@@ -47,6 +48,16 @@ export default produce((draft, action) => {
             tilesToFlip.forEach((tile) => {
                 draft.board.tiles[tile] = !draft.board.tiles[tile];
             });
+            const currentBoard = current(draft.board.tiles);
+            const currentPlayerCards = current(draft.playerCards);
+            const currentCompletion = current(draft.completedCards);
+            draft.completedCards = currentPlayerCards.map((player, p) =>
+                player.map(
+                    (card, c) =>
+                        compareArrays(card, currentBoard) ||
+                        currentCompletion[p][c]
+                )
+            );
             break;
         case CREATE_LINK:
             draft.board.links[parseInt(payload.src)] = union(
