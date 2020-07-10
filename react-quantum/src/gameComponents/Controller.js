@@ -73,7 +73,10 @@ function Controller(props) {
             numInputs: 2,
             cost: config.actionCosts[CREATE_LINK] || 0,
             execute: function () {
-                props.createLink(props.inputMode.inputs, this.cost);
+                const [src, dst] = props.inputMode.inputs;
+                if (isValidLink(src, dst, props.size)) {
+                    props.createLink(props.inputMode.inputs, this.cost);
+                }
             },
             buttonConfig: {
                 variant: 'contained',
