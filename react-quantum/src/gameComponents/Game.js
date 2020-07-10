@@ -105,6 +105,7 @@ class Game extends React.Component {
                             setInputMode={this.setInputMode}
                             setInputs={this.setInputs}
                             inputMode={this.state.inputMode}
+                            size={config.boardSize}
                             // setState={this.setState}
                         />
                     </Grid>
