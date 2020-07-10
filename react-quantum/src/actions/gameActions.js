@@ -58,9 +58,12 @@ export default {
             type: CLEAR_HISTORY,
         };
     },
-    [END_TURN]: (inputs, cost) => {
-        return {
+    [END_TURN]: (inputs, cost) => (dispatch) => {
+        dispatch({
             type: END_TURN,
-        };
+        });
+        dispatch({
+            type: CLEAR_HISTORY,
+        });
     },
 };
