@@ -8,7 +8,7 @@ import {
 import { produce, current } from 'immer';
 import { pull, union } from 'lodash';
 import config from '../config.json';
-import traverseGraph from '../helper/traverseGraph';
+// import traverseGraph from '../helper/traverseGraph';
 // import checkVictory from '../helper/checkVictory';
 import compareArrays from '../helper/compareArrays';
 import { generateAllCards } from '../helper/generateRandomCard';
@@ -41,8 +41,8 @@ export default produce((draft, action) => {
             draft = payload.newState;
             break;
         case FLIP_TILE:
-            const tilesToFlip = traverseGraph(draft.board.links, [payload]);
-            tilesToFlip.forEach((tile) => {
+            // const tilesToFlip = traverseGraph(draft.board.links, [payload]);
+            payload.forEach((tile) => {
                 draft.board.tiles[tile] = !draft.board.tiles[tile];
             });
             const currentBoard = current(draft.board.tiles);

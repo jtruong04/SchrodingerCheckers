@@ -9,6 +9,8 @@ import {
     END_TURN,
 } from './types';
 
+import { traverseGraphDepth } from '../helper/traverseGraph';
+
 export default {
     [SET_STATE]: (newState) => {
         return {
@@ -16,12 +18,27 @@ export default {
             payload: newState,
         };
     },
-    [FLIP_TILE]: (inputs, cost) => {
-        return {
-            type: FLIP_TILE,
-            payload: inputs[0],
-            cost: cost,
-        };
+    [FLIP_TILE]: (inputs, cost) => (dispatch, getState) => {
+        const flippedTilesWithDepth = traverseGraphDepth(
+            getState().game.state.present.board.links,
+            [
+                {
+                    node: inputs[0],
+                    depth: 0,
+                },
+            ]
+        );
+        flippedTilesWithDepth.forEach((depth, idx) => {
+            setTimeout(
+                () =>
+                    dispatch({
+                        type: FLIP_TILE,
+                        payload: depth,
+                        cost: cost,
+                    }),
+                idx * 100
+            );
+        });
     },
     [CREATE_LINK]: (inputs, cost) => {
         return {
