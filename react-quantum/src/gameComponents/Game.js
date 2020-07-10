@@ -7,6 +7,7 @@ import Controller from './Controller';
 // Config
 import config from '../config.json';
 import { generateAllCards } from '../helper/generateRandomCard';
+import CardCarousel from './CardCarousel';
 
 class Game extends React.Component {
     constructor(props) {
@@ -87,6 +88,14 @@ class Game extends React.Component {
                 >
                     <Grid item xs={10}>
                         <Board
+                            size={config.boardSize}
+                            handleEvent={this.handleEvent}
+                        />
+                    </Grid>
+                    <Grid item xs={6}>
+                        <CardCarousel
+                            numCards={config.numberTargetCards}
+                            numPlayers={2}
                             size={config.boardSize}
                             handleEvent={this.handleEvent}
                         />
