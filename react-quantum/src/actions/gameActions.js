@@ -36,7 +36,7 @@ export default {
                         payload: depth,
                         cost: idx === 0 ? cost : 0,
                     }),
-                idx * 100
+                idx * 250
             );
         });
     },
