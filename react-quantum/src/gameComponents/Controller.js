@@ -153,7 +153,10 @@ function Controller(props) {
                     )
                 }
             >
-                {ActionHandler[action].name}
+                {ActionHandler[action].name}{' '}
+                {ActionHandler[action].cost
+                    ? `(${ActionHandler[action].cost})`
+                    : ''}
             </Button>
         ));
     };
