@@ -2,9 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Tile from './Tile.js';
 import Link from './Link.js';
-
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+// import { CSSTransitionGroup } from 'react-transition-group';
+// import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { makeStyles } from '@material-ui/core/styles';
-// import './Board.css';
+import './Board.css';
 
 // List of props available:
 // this.props.board : the game board
@@ -24,7 +26,7 @@ function Board(props) {
     const renderTiles = () => {
         return props.board.tiles.map((tile, idx) => (
             <Tile
-                key={idx}
+                // key={idx}
                 _id={idx}
                 state={tile}
                 size={props.size}
@@ -38,13 +40,18 @@ function Board(props) {
         props.board.links.forEach((dstList, src) =>
             dstList.forEach((dst) =>
                 renderedLinks.push(
-                    <Link
-                        key={src * props.size * props.size + dst}
-                        dst={dst}
-                        src={src}
-                        size={props.size}
-                        handleEvent={props.handleEvent}
-                    />
+                    <CSSTransition
+                        key={src * props.size ** 2 + dst}
+                        classNames='fade'
+                        timeout={{ exit: 100, enter: 100 }}
+                    >
+                        <Link
+                            dst={dst}
+                            src={src}
+                            size={props.size}
+                            handleEvent={props.handleEvent}
+                        />
+                    </CSSTransition>
                 )
             )
         );
@@ -55,7 +62,7 @@ function Board(props) {
     return (
         <div className={classes.root}>
             {renderTiles()}
-            {renderLinks()}
+            <TransitionGroup>{renderLinks()}</TransitionGroup>
         </div>
     );
 }
