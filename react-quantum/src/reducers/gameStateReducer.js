@@ -57,6 +57,11 @@ export default produce((draft, action) => {
             );
             break;
         case CREATE_LINK:
+            if (
+                draft.board.links[parseInt(payload.src)].includes(payload.dst)
+            ) {
+                return;
+            }
             draft.board.links[parseInt(payload.src)] = union(
                 draft.board.links[parseInt(payload.src)],
                 [payload.dst]

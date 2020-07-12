@@ -50,7 +50,7 @@ const useStyles = makeStyles({
       position      : 'absolute',
       textAlign     : 'center',
       fontSize      : 'calc(2.5vw + 2.5vh)',
-      color         : 'blue',
+      color         : 'grey',
       background    : '#0000',
       border        : 0,
       display       : 'flex',
@@ -63,7 +63,10 @@ const useStyles = makeStyles({
         position      : 'absolute',
         transform     : 'translate(-50%, -50%)',
         ...calculatePosition(props.src, props.dst, props.size),
-    })
+    }),
+    isHighlighted: {
+        filter: 'drop-shadow( 0px 0px 5px red)',
+    },
 });
 
 function Link(props) {
@@ -97,7 +100,12 @@ function Link(props) {
     };
 
     return (
-        <div className={clsx(classes.link)}>
+        <div
+            className={clsx(
+                classes.link,
+                props.highlighted ? classes.isHighlighted : null
+            )}
+        >
             <div className={clsx(classes.link_centering)} onClick={handleClick}>
                 {arrow(props.src, props.dst, props.size)}
             </div>

@@ -42,6 +42,10 @@ const useStyles = makeStyles({
     isFlipped: {
         transform: 'rotateY(-180deg)',
     },
+    isHighlighted: {
+        borderRadius: '10%',
+        boxShadow: 'inset 0px 0px 5px 5px #00BFFF80',
+    },
 });
 
 function Tile(props) {
@@ -56,12 +60,25 @@ function Tile(props) {
             elevation={3}
             className={clsx(
                 classes.tile,
-                props.state ? classes.isFlipped : null
+                props.state ? classes.isFlipped : null,
+                props.highlighted ? classes.isHighlighted : null
             )}
             onClick={handleClick}
         >
-            <div className={clsx(classes.tileFace, classes.blackTile)}></div>
-            <div className={clsx(classes.tileFace, classes.whiteTile)}></div>
+            <div
+                className={clsx(
+                    classes.tileFace,
+                    classes.blackTile,
+                    props.highlighted ? classes.isHighlighted : null
+                )}
+            ></div>
+            <div
+                className={clsx(
+                    classes.tileFace,
+                    classes.whiteTile,
+                    props.highlighted ? classes.isHighlighted : null
+                )}
+            ></div>
         </div>
     );
 }
