@@ -42,8 +42,8 @@ function Board(props) {
                 renderedLinks.push(
                     <CSSTransition
                         key={src * props.size ** 2 + dst}
-                        classNames='fade'
-                        timeout={{ exit: 100, enter: 100 }}
+                        classNames='scale_and_fade'
+                        timeout={{ exit: 200, enter: 200 }}
                     >
                         <Link
                             dst={dst}

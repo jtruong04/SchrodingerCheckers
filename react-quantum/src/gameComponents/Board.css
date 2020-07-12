@@ -1,14 +1,18 @@
-.fade-enter {
+.scale_and_fade-enter {
+    transform: scale(0);
     opacity: 0;
 }
-.fade-enter-active {
+.scale_and_fade-enter-active {
+    transform: scale(1);
     opacity: 1;
-    transition: opacity 100ms;
+    transition: all 200ms;
 }
-.fade-exit {
+.scale_and_fade-exit {
+    transform: scale(1);
     opacity: 1;
 }
-.fade-exit-active {
+.scale_and_fade-exit-active {
+    transform: scale(0);
     opacity: 0;
-    transition: opacity 100ms;
+    transition: all 200ms;
 }

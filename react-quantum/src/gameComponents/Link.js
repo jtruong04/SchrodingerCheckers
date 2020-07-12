@@ -49,16 +49,21 @@ const useStyles = makeStyles({
       zIndex        : 5,
       position      : 'absolute',
       textAlign     : 'center',
-      fontSize      : 'calc(2vw + 2vh)',
-      transform     : 'translate(-50%, -50%)',
-      color         : 'red',
+      fontSize      : 'calc(2.5vw + 2.5vh)',
+      color         : 'blue',
       background    : '#0000',
       border        : 0,
       display       : 'flex',
       justifyContent: 'center',
       alignItems    : 'center',
       ...calculatePosition(props.src, props.dst, props.size)
-  })
+    }),
+    // prettier-ignore
+    link_centering: (props) => ({
+        position      : 'absolute',
+        transform     : 'translate(-50%, -50%)',
+        ...calculatePosition(props.src, props.dst, props.size),
+    })
 });
 
 function Link(props) {
@@ -92,8 +97,10 @@ function Link(props) {
     };
 
     return (
-        <div className={clsx(classes.link)} onClick={handleClick}>
-            {arrow(props.src, props.dst, props.size)}
+        <div className={clsx(classes.link)}>
+            <div className={clsx(classes.link_centering)} onClick={handleClick}>
+                {arrow(props.src, props.dst, props.size)}
+            </div>
         </div>
     );
 }
