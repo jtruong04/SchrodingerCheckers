@@ -1,10 +1,10 @@
 {
-    "boardSize"           : 5,
+    "boardSize": 4,
     "startingActionPoints": 3,
-    "numberTargetCards"   : 3,
-    "actionCosts"         : {
-        "FlipTile"  : 1,
-        "CreateLink": 1,
-        "DeleteLink": 2
+    "numberTargetCards": 3,
+    "actionCosts": {
+        "CMD_FLIP_TILE": 1,
+        "CMD_CREATE_LINK": 1,
+        "CMD_DELETE_LINK": 2
     }
 }
