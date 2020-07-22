@@ -90,6 +90,7 @@ class Game extends React.Component {
                         <Board
                             size={config.boardSize}
                             handleEvent={this.handleEvent}
+                            inputMode={this.state.inputMode}
                         />
                     </Grid>
                     <Grid item xs={6}>

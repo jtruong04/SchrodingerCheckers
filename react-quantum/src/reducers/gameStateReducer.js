@@ -8,7 +8,7 @@ import {
 import { produce, current } from 'immer';
 import { pull, union } from 'lodash';
 import config from '../config.json';
-import traverseGraph from '../helper/traverseGraph';
+// import traverseGraph from '../helper/traverseGraph';
 // import checkVictory from '../helper/checkVictory';
 import compareArrays from '../helper/compareArrays';
 import { generateAllCards } from '../helper/generateRandomCard';
@@ -16,6 +16,7 @@ import { generateAllCards } from '../helper/generateRandomCard';
 const initialState = {
     board: {
         tiles: new Array(config.boardSize ** 2).fill(false),
+        tilesAnimDelay: new Array(config.boardSize ** 2).fill(0),
         links: new Array(config.boardSize ** 2).fill([]),
     },
     playerCards: generateAllCards(
@@ -41,9 +42,12 @@ export default produce((draft, action) => {
             draft = payload.newState;
             break;
         case FLIP_TILE:
-            const tilesToFlip = traverseGraph(draft.board.links, [payload]);
-            tilesToFlip.forEach((tile) => {
-                draft.board.tiles[tile] = !draft.board.tiles[tile];
+            // const tilesToFlip = traverseGraph(draft.board.links, [payload]);
+            payload.forEach((tiles, depth) => {
+                tiles.forEach((idx) => {
+                    draft.board.tiles[idx] = !draft.board.tiles[idx];
+                    draft.board.tilesAnimDelay[idx] = depth * 200;
+                });
             });
             const currentBoard = current(draft.board.tiles);
             const currentPlayerCards = current(draft.playerCards);
@@ -57,6 +61,11 @@ export default produce((draft, action) => {
             );
             break;
         case CREATE_LINK:
+            if (
+                draft.board.links[parseInt(payload.src)].includes(payload.dst)
+            ) {
+                return;
+            }
             draft.board.links[parseInt(payload.src)] = union(
                 draft.board.links[parseInt(payload.src)],
                 [payload.dst]
