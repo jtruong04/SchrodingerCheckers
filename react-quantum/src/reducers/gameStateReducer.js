@@ -16,6 +16,7 @@ import { generateAllCards } from '../helper/generateRandomCard';
 const initialState = {
     board: {
         tiles: new Array(config.boardSize ** 2).fill(false),
+        tilesAnimDelay: new Array(config.boardSize ** 2).fill(0),
         links: new Array(config.boardSize ** 2).fill([]),
     },
     playerCards: generateAllCards(
@@ -42,8 +43,11 @@ export default produce((draft, action) => {
             break;
         case FLIP_TILE:
             // const tilesToFlip = traverseGraph(draft.board.links, [payload]);
-            payload.forEach((tile) => {
-                draft.board.tiles[tile] = !draft.board.tiles[tile];
+            payload.forEach((tiles, depth) => {
+                tiles.forEach((idx) => {
+                    draft.board.tiles[idx] = !draft.board.tiles[idx];
+                    draft.board.tilesAnimDelay[idx] = depth * 200;
+                });
             });
             const currentBoard = current(draft.board.tiles);
             const currentPlayerCards = current(draft.playerCards);

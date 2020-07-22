@@ -28,16 +28,10 @@ export default {
                 },
             ]
         );
-        flippedTilesWithDepth.forEach((depth, idx) => {
-            setTimeout(
-                () =>
-                    dispatch({
-                        type: FLIP_TILE,
-                        payload: depth,
-                        cost: idx === 0 ? cost : 0,
-                    }),
-                idx * 250
-            );
+        dispatch({
+            type: FLIP_TILE,
+            payload: flippedTilesWithDepth,
+            cost: cost,
         });
     },
     [CREATE_LINK]: (inputs, cost) => {

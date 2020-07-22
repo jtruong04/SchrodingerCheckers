@@ -1,11 +1,10 @@
 import { combineReducers } from 'redux';
-import undoable, { groupByActionTypes } from 'redux-undo';
+import undoable from 'redux-undo';
 import errorReducer from './errorReducer';
 import authReducer from './authReducer';
 import alertReducer from './alertReducer';
 import gameStateReducer from './gameStateReducer';
 import gameMetaReducer from './gameMetaReducer';
-import { FLIP_TILE } from '../actions/types';
 
 const gameReducer = combineReducers({
     meta: gameMetaReducer,
@@ -16,7 +15,6 @@ const gameReducer = combineReducers({
         filter: function filterActions(action, currentState, previousHistory) {
             return action.type.substring(0, 3) === 'CMD';
         },
-        groupBy: groupByActionTypes([FLIP_TILE]),
     }),
 });
 

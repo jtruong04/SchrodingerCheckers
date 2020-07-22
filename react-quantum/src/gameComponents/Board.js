@@ -60,6 +60,7 @@ function Board(props) {
                 size={props.size}
                 handleEvent={props.handleEvent}
                 highlighted={isTileHighlighted(props.inputMode, idx)}
+                delay={props.board.tilesAnimDelay[idx]}
             />
         ));
     };
